@@ -1,6 +1,6 @@
 <mat-card>
     <div class="pre-header">
-        <img mat-card-avatar [src]="myProfile.picture">
+        <img mat-card-avatar [src]="(myProfile | async).picture">
     </div>
     <mat-card-header>
      
@@ -8,7 +8,7 @@
             <h1><b>My Account</b></h1>
         </mat-card-title>
         <mat-card-subtitle>
-            <h2><b [innerHTML]="myProfile.name"></b></h2>
+            <h2><b [innerHTML]="(myProfile | async).name"></b></h2>
         </mat-card-subtitle>
 
 
@@ -20,7 +20,7 @@
                 <div class="grid-content">
                     <div class="sub-content">
                         <span><b> Member since </b></span>
-                        <span [innerHTML]="myProfile.created_at  | date : 'dd-MM-yyyy HH:mm:ss'"> </span>
+                        <span [innerHTML]="(myProfile | async).created_at  | date : 'dd-MM-yyyy HH:mm:ss'"> </span>
                     </div>
                 </div>
             </mat-grid-tile>

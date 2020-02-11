@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, CanDeactivate } from '@angular/router';
+import { CanActivate, Router, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthservicesService } from '../authservices.service';
 import { Observable } from 'rxjs';
 import { ICanComponentDeactivate } from '@WebManager/app/shared/ICanDeactivateComponent';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,22 +11,19 @@ import { ICanComponentDeactivate } from '@WebManager/app/shared/ICanDeactivateCo
 
 export class AuthGuardService implements CanActivate {  
   constructor(public auth: AuthservicesService, public router: Router) {}  
-  
-  canActivate(): boolean {
-    if (!this.auth.isLogged) {
-      this.router.navigate(['/login']);
-      return false;
-    }
-    return true;
-  }
 
-  canDeactivate(): boolean {
-    if (!this.auth.isLogged) {
-      return true;
-    }
-    return false;
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean|UrlTree> | boolean {
+    return this.auth.isAuthenticated$.pipe(
+      tap(loggedIn => {
+        if (!loggedIn) {
+          this.auth.login(state.url);
+        }
+      })
+    );
   }
-  
 }
 
 

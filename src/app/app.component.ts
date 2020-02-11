@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthservicesService } from './services/authservices.service';
 
@@ -28,6 +28,6 @@ export class AppComponent {
     this.auth.logout();
   }
   public get myProfile(){
-    return this.auth.myProfile;
+    return this.auth.userProfile$;
   }
 }

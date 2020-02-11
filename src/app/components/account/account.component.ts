@@ -17,8 +17,8 @@ export class AccountComponent implements OnInit {
     this.myData = this.dataService.MyActivity;
   }
 
-  public get myProfile(): OAuthUser{
-    return this.auth.myProfile;
+  public get myProfile(){
+    return this.auth.userProfile$;
   }
 
   ngOnInit() {

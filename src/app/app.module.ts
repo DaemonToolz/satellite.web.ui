@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatSidenavModule, MatToolbarModule, MatListModule, MatButtonModule, MatIconModule, MatCardModule, MatTabsModule, MatInputModule, MatFormFieldModule, MatGridListModule, MatTreeModule, MatCheckboxModule }from '@angular/material'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
@@ -21,11 +20,23 @@ import { ContactsComponent } from './components/chat/contacts/contacts.component
 import { ContactpageComponent } from './components/chat/contactpage/contactpage.component';
 import { FilterPipe } from './Pipes/filter-pipe.pipe';
 import { UsersService } from './services/contacts/users.service';
-import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { ScrollingModule  } from '@angular/cdk/scrolling';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { DatePipe } from '@angular/common';
 import { HttpInterceptorService } from './services/interceptor/http-interceptor.service';
+import { MatTreeModule } from '@angular/material/tree'
+import { MatTabsModule } from '@angular/material/tabs'
+import { MatButtonModule } from '@angular/material/button'
+import { MatToolbarModule } from '@angular/material/toolbar'
+import { MatGridListModule } from '@angular/material/grid-list'
+import { MatCardModule } from '@angular/material/card'
+import { MatIconModule } from '@angular/material/icon'
+import { MatInputModule } from '@angular/material/input'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatListModule } from '@angular/material/list'
 
 @NgModule({
   declarations: [
@@ -49,7 +60,7 @@ import { HttpInterceptorService } from './services/interceptor/http-interceptor.
     NgxChartsModule,
     MatTabsModule,
     ReactiveFormsModule,
-    ScrollDispatchModule,
+    ScrollingModule ,
     BrowserAnimationsModule,
     BrowserModule,
     MatButtonModule,
