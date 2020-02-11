@@ -1,0 +1,31 @@
+<mat-toolbar class="sticky">
+    
+    <button mat-icon-button class="centered">
+        <mat-icon>add_circle_outline</mat-icon>
+    </button>
+
+    <a mat-icon-button routerLink="/chat/contacts">
+        <mat-icon>contacts</mat-icon>
+    </a>
+
+    <a mat-icon-button routerLink="/chat/settings">
+        <mat-icon>settings_applications</mat-icon>
+    </a>
+
+    <button mat-icon-button color="warn" class="centered">
+        <mat-icon>delete_forever</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-action-list role="list" matRipple>
+    <cdk-virtual-scroll-viewport [itemSize]="72">
+        <mat-list-item role="listitem" *cdkVirtualFor="let content of contents" (click)="open(content.id)">
+            <h2 mat-line><b>{{content.name}}</b></h2>
+            <h3 mat-line>{{content.lastMessage}}</h3>
+
+            <mat-icon class="mat-24">chevron_right</mat-icon>
+
+
+        </mat-list-item>
+    </cdk-virtual-scroll-viewport>
+</mat-action-list>

@@ -1,0 +1,101 @@
+<mat-card>
+    <div class="pre-header">
+        <img mat-card-avatar [src]="myProfile.picture">
+    </div>
+    <mat-card-header>
+     
+        <mat-card-title>
+            <h1><b>My Account</b></h1>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <h2><b [innerHTML]="myProfile.name"></b></h2>
+        </mat-card-subtitle>
+
+
+    </mat-card-header>
+
+    <mat-card-content>
+        <mat-grid-list cols="4" rowHeight="1:0.5">
+            <mat-grid-tile>
+                <div class="grid-content">
+                    <div class="sub-content">
+                        <span><b> Member since </b></span>
+                        <span [innerHTML]="myProfile.created_at  | date : 'dd-MM-yyyy HH:mm:ss'"> </span>
+                    </div>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="grid-content">
+                    <div class="sub-content">
+                        <span><b> Account type </b></span>
+                        <span> Standard </span>
+                    </div>
+                    <div class="sub-content">
+                        <span><b>Points</b></span>
+                        <span> 500 </span>
+                    </div>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="grid-content">
+                    <div class="sub-content">
+                        <span><b> Bla bla bla </b></span>
+                        <span> bla bla bla </span>
+                    </div>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Log out</span>
+        </button>
+        <button mat-raised-button color="warn" (click)="logout()">
+            <mat-icon>delete_forever</mat-icon>
+            <span>Delete </span>
+        </button>
+    </mat-card-actions>
+</mat-card>
+
+<mat-card>
+    <mat-card-header>
+        <h1><b>My Dashboard</b></h1>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-tab-group dynamicHeight>
+            <mat-tab label="General">
+                <ngx-charts-number-card [scheme]="colorScheme" [results]="myData" [cardColor]="cardColor">
+                </ngx-charts-number-card>
+            </mat-tab>
+            <mat-tab label="Settings 2">
+                <span>LOREM IPSUM</span>
+            </mat-tab>
+        </mat-tab-group>
+
+    </mat-card-content>
+</mat-card>
+
+
+<mat-card>
+    <mat-card-header>
+        <h1><b>My Settings</b></h1>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-tab-group dynamicHeight>
+            <mat-tab label="Personal data">
+                <div class="grid-content">
+                    <span>LOREM IPSUM</span>
+                </div>
+            </mat-tab>
+            <mat-tab label="My plans">
+                <div class="grid-content">
+                    <span>LOREM IPSUM</span>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+    </mat-card-content>
+</mat-card>

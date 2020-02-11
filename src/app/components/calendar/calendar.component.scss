@@ -1,0 +1,19 @@
+mat-grid-tile{
+    flex-direction: column;
+    display:flex;
+    flex: 1;
+    border-radius: 5px;
+    border : 1px solid black;
+}
+
+
+
+mat-grid-tile:hover{
+    cursor: pointer;
+    background-color: rgba(lightblue, 0.25);
+}
+
+
+mat-card-title{
+    text-align: center;;
+}

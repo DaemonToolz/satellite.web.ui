@@ -1,0 +1,83 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h1><b>Welcome to My Space</b></h1>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <h2> Here you can store everything you want</h2>
+            <button mat-raised-button>
+                Share a bit of your space !
+            </button>
+            <button mat-raised-button>
+                Invite a friend !
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+        <div>
+            <h2><b>Current folder : {{ AbsolutePath(selectedFolder) }}</b></h2>
+            <h3>Number of files in this folder : {{selectedFolder.children.length}}</h3>
+            <h3>Total size : {{TotalSize}} KB</h3>
+
+        </div>
+        <mat-toolbar>
+            <button class="centered"  mat-icon-button>
+                <mat-icon>note_add</mat-icon>
+            </button >
+            <button class="centered"  mat-icon-button>
+                <mat-icon>reorder</mat-icon>
+            </button >
+            <button class="centered"  mat-icon-button>
+                <mat-icon>refresh</mat-icon>
+            </button >
+              
+            <button class="centered"  mat-icon-button>
+                <mat-icon>import_export</mat-icon>
+            </button >
+        
+            <button class="centered"  mat-icon-button>
+                <mat-icon color="warn" *ngIf="oneSelection" >clear</mat-icon>
+                <mat-icon  color="primary" *ngIf="!oneSelection" > done_all</mat-icon>
+            </button >
+        
+        </mat-toolbar>
+        <mat-action-list role="list">
+            <cdk-virtual-scroll-viewport [itemSize]="30">
+                <mat-list-item role="listitem" *cdkVirtualFor="let node of selectedFolder.children">
+                    <mat-checkbox [(ngModel)]="fileDetails(node.name).selected"></mat-checkbox>
+
+                    <button mat-icon-button class="mat-24 centered file-type">
+                        <mat-icon svgIcon="{{ FileType[fileDetails(node.name).file.type] | lowercase }}"></mat-icon>
+                    </button>
+                    <h2 mat-line><b>{{node.name}}</b></h2>
+
+
+                    <h3 mat-line *ngIf="fileDetails(node.name).file.type !== FileType.FOLDER">
+                        Size : {{ fileDetails(node.name).file.size }} KB
+                    </h3>
+
+                    <button mat-icon-button class="mat-24 centered">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button mat-icon-button class="mat-24 centered">
+                        <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+
+                    <button mat-icon-button class="mat-24 centered">
+                        <mat-icon>settings_applications</mat-icon>
+                    </button>
+
+                    <button mat-icon-button color="warn" class="mat-24 centered">
+                        <mat-icon>delete_forever</mat-icon>
+                    </button>
+
+                    <mat-icon class="mat-24" *ngIf="fileDetails(node.name).file.type !== FileType.FILE">chevron_right
+                    </mat-icon>
+
+                </mat-list-item>
+            </cdk-virtual-scroll-viewport>
+        </mat-action-list>
+    </mat-card-content>
+</mat-card>

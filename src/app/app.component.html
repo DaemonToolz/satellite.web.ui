@@ -1,0 +1,47 @@
+<mat-toolbar color="primary">
+    <a mat-button class="main-icon" routerLink="/">
+        <mat-icon class="big-icon" svgIcon="web_manager"> </mat-icon>
+        <span>Web Manager</span>
+    </a>
+
+    <a *ngIf="auth.isLogged"  mat-button routerLink="/myspace" >
+        <mat-icon svgIcon="my_space"> </mat-icon>
+        <span> My Space</span>
+    </a>
+
+    <button *ngIf="auth.isLogged"  mat-button (click)="drawer.toggle()">
+        <mat-icon  svgIcon="choices"> </mat-icon>
+        <span>Chat</span>
+    </button>
+    <button mat-button routerLink="/mycalendar">
+        <mat-icon> calendar_today</mat-icon>
+        <span> My Calendar </span>
+    </button>
+
+    <button mat-icon-button class="centered">
+        <mat-icon>help_outline</mat-icon> 
+    </button>
+    
+    <button *ngIf="auth.isLogged" class="centered" mat-icon-button >
+        <mat-icon> notifications</mat-icon>
+    </button>
+
+    <a *ngIf="auth.isLogged"  mat-button routerLink="/account" >
+        <mat-icon> account_circle</mat-icon>
+        <span [innerHTML]="myProfile.name"></span>
+    </a>
+
+    <button *ngIf="!auth.isLogged"  mat-button (click)="login()" >
+        <mat-icon> account_circle</mat-icon>
+        <span>Log in</span>
+    </button>
+</mat-toolbar>
+<mat-drawer-container class="main-container" autosize>
+    <mat-drawer mode="side" #drawer>
+        <app-navbar *ngIf="auth.isLogged"></app-navbar>
+    </mat-drawer>
+    <mat-drawer-content>
+        <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+  

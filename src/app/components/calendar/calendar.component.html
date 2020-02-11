@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h2>My Calendar</h2>
+        </mat-card-title>
+
+    </mat-card-header>
+    <mat-card-content>
+        <h3> Avril 2020</h3>
+        <mat-grid-list cols="7" gutterSize="5px" rowHeight="2:0.5">
+            <mat-grid-tile *ngFor="let date of getDaysInMonth(03,2020)">
+                <span><strong [innerHTML]=" date | date : 'dd EEEE'"></strong></span>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-card-content>
+</mat-card>

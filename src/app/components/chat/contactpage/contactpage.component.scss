@@ -1,0 +1,44 @@
+img{
+    width: 100%;
+}
+
+
+.full-height{
+    text-align:center;
+    height:100%;
+    margin: 5px;
+
+    cursor: pointer;
+}
+
+.full-height:hover{
+    background-color: rgba($color: #000000, $alpha: 0.15);
+}
+
+mat-divider {
+    margin: 10px;
+}
+
+cdk-virtual-scroll-viewport.max-size{
+    width: 100%;
+    height: 100%;
+}
+
+.flex{
+    width: 100%;
+    height:50%;
+}
+
+.small-flex{
+    width: 100%;
+    height:28%;
+}
+
+.centered ::ng-deep .mat-button-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .small-text{
+      font-size: 1em;
+  }

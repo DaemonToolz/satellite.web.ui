@@ -1,0 +1,74 @@
+<mat-card>
+    <mat-card-header>
+        <h1><b> My contacts</b></h1>
+    </mat-card-header>
+</mat-card>
+<div class="small-flex">
+    <cdk-virtual-scroll-viewport orientation="horizontal" class="max-size" [itemSize]="150">
+        <div class="flex" fxLayout="row" >
+            <mat-card fxFlex="50%" class="full-height" *cdkVirtualFor="let usr  of _userService.users">
+                <mat-card-header>
+                    <div mat-card-avatar>
+                        <img src="assets/images/default_user.png" class="round-picture"/>
+                    </div>
+                    <mat-card-title class="small-text"><b> {{usr.username}}</b></mat-card-title>
+                    <mat-card-subtitle>
+                        <h5>{{usr.name}}</h5>
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="assets/images/myspace.png" alt="">
+                <mat-card-actions>
+                    <button color="primary" class="centered" mat-icon-button>
+                        <mat-icon>person_add_disabled</mat-icon>
+                    </button>
+
+                    <button color="primary" class="centered" mat-icon-button>
+                        <mat-icon>star</mat-icon>
+                    </button>
+
+                    <button color="accent" class="centered" mat-icon-button>
+                        <mat-icon>favorite</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </cdk-virtual-scroll-viewport>
+</div>
+
+<mat-divider>
+
+</mat-divider>
+
+
+<div class="flex">
+    <cdk-virtual-scroll-viewport orientation="vertical" class="max-size" [itemSize]="30*5">
+        <div class="flex" fxLayoutAlign="center center" fxLayout="row wrap">
+            <mat-card fxFlex="30%" class="full-height" *cdkVirtualFor="let usr  of _userService.users">
+                <mat-card-header>
+                    <div mat-card-avatar>
+                        <img src="assets/images/default_user.png"  class="round-picture" />
+                    </div>
+                    <mat-card-title><b> {{usr.username}}</b></mat-card-title>
+                    <mat-card-subtitle>
+                        <h4>{{usr.name}}</h4>
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="assets/images/myspace.png" alt="">
+                <mat-card-actions>
+                    <button color="primary" class="centered" mat-icon-button>
+                        <mat-icon>person_add</mat-icon>
+                    </button>
+
+                    <button color="primary" class="centered" mat-icon-button>
+                        <mat-icon>star_border</mat-icon>
+                    </button>
+
+                    <button color="accent" class="centered" mat-icon-button>
+                        <mat-icon>favorite_border</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </cdk-virtual-scroll-viewport>
+
+</div>
