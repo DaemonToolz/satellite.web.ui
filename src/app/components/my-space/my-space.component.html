@@ -17,9 +17,10 @@
     <mat-card-content>
         <div>
             <h2><b>Current folder : {{ AbsolutePath(selectedFolder) }}</b></h2>
+            <!--
             <h3>Number of files in this folder : {{selectedFolder.children.length}}</h3>
             <h3>Total size : {{TotalSize}} KB</h3>
-
+            -->
         </div>
         <mat-toolbar>
             <button class="centered"  mat-icon-button>
@@ -28,7 +29,7 @@
             <button class="centered"  mat-icon-button>
                 <mat-icon>reorder</mat-icon>
             </button >
-            <button class="centered"  mat-icon-button>
+            <button class="centered"  mat-icon-button (click)="refreshFiles()">
                 <mat-icon>refresh</mat-icon>
             </button >
               
@@ -44,17 +45,17 @@
         </mat-toolbar>
         <mat-action-list role="list">
             <cdk-virtual-scroll-viewport [itemSize]="30">
-                <mat-list-item role="listitem" *cdkVirtualFor="let node of selectedFolder.children">
-                    <mat-checkbox [(ngModel)]="fileDetails(node.name).selected"></mat-checkbox>
+                <mat-list-item role="listitem" *cdkVirtualFor="let node of files$ | async">
+                    <!--<mat-checkbox [(ngModel)]="fileDetails(node.name).selected"></mat-checkbox>-->
 
                     <button mat-icon-button class="mat-24 centered file-type">
-                        <mat-icon svgIcon="{{ FileType[fileDetails(node.name).file.type] | lowercase }}"></mat-icon>
+                        <mat-icon svgIcon="{{ FileType[node.type] | lowercase }}"></mat-icon>
                     </button>
                     <h2 mat-line><b>{{node.name}}</b></h2>
 
 
-                    <h3 mat-line *ngIf="fileDetails(node.name).file.type !== FileType.FOLDER">
-                        Size : {{ fileDetails(node.name).file.size }} KB
+                    <h3 mat-line *ngIf="node.type !== FileType.FOLDER">
+                        Size : {{ node.size / 1000}} KB
                     </h3>
 
                     <button mat-icon-button class="mat-24 centered">
@@ -73,7 +74,7 @@
                         <mat-icon>delete_forever</mat-icon>
                     </button>
 
-                    <mat-icon class="mat-24" *ngIf="fileDetails(node.name).file.type !== FileType.FILE">chevron_right
+                    <mat-icon class="mat-24" *ngIf="node.type !== FileType.FILE">chevron_right
                     </mat-icon>
 
                 </mat-list-item>

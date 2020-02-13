@@ -9,6 +9,10 @@ export const environment = {
     domain: 'dtoolz.eu.auth0.com',
     clientId: 'wDeV68zg6oi0xCYvZFkg0cDjS6EfvtAD',
     callbackURL: 'http://localhost:4200/'
+  },
+
+  services: {
+    myspace : 'http://localhost:10850'
   }
 };
 

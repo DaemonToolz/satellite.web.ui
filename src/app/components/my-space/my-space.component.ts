@@ -1,12 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Files, FileType } from 'src/app/Models/files';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
+import { MyspaceService } from 'src/app/services/spaces/myspace.service';
+import { AuthservicesService } from 'src/app/services/authservices.service';
+import { Observable, Subscription } from 'rxjs';
 
 
 class VirtualFile{
   public file: Files;
   public selected: boolean;
+
+  public constructor(payload : Files, selection :boolean){
+    this.file = payload;
+    this.selected = selection;
+  }
 }
 
 @Component({
@@ -14,43 +22,42 @@ class VirtualFile{
   templateUrl: './my-space.component.html',
   styleUrls: ['./my-space.component.scss']
 })
-export class MySpaceComponent implements OnInit {
+export class MySpaceComponent implements OnInit, OnDestroy {
+
   private myFiles: VirtualFile[] = [];
 
   public FileType = FileType;
   public selectedFolder: Files;
+  public files$ : Observable<Files[]>;
+
+
 
   ngOnInit() {
   }
 
+  ngOnDestroy(): void {
 
-  constructor() {
-    let root = new Files();
-    root.name = "/";
-    root.size = 0;
-    root.type = FileType.FOLDER;
-    root.children = [];
+  }
+
+  public refreshFiles(){
+    this.files$ = this.spaceServices.getFiles("axel.maciejewski");
+    
+    /*.subscribe(data => {
+      let root = new Files();
+      root.name = "/";
+      root.size = 0;
+      root.type = FileType.FOLDER;
+      root.children = data;
+      data.forEach(file => file.parent = root)
+      this.selectedFolder = root;
+      this.myFiles = data.map(file => new VirtualFile(file, false));
+    });*/
 
     
-    
-    for (let i = 0; i < 100; ++i) {
-      let file = new Files();
-      file.name = "File#" + i;
-      file.size = 650;
-      file.type = (i % 5 === 0 ? FileType.FOLDER : FileType.FILE)
-      file.parent = root;
+  }
 
-      root.children.push(file);
-      let vf = new VirtualFile();
-      vf.file = file;
-      vf.selected = false;
-      this.myFiles.push(vf)
-    }
-    let vf = new VirtualFile();
-    vf.file = root;
-    vf.selected = false;
-    this.myFiles.push(vf)
-    this.selectedFolder = root;
+  constructor(private auth: AuthservicesService, private spaceServices: MyspaceService) {
+    this.refreshFiles()
   }
 
 
@@ -59,7 +66,7 @@ export class MySpaceComponent implements OnInit {
   }
 
   public AbsolutePath(file: Files): string {
-    return file.parent != null ? (file.parent.name + "/" + file.name) : (file.name);
+    return file == null ? "" : (file.parent != null ? (file.parent.name + "/" + file.name) : (file.name));
   }
 
   public get TotalSize(): number {
