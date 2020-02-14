@@ -7,11 +7,11 @@ import { AuthservicesService } from 'src/app/services/authservices.service';
 import { Observable, Subscription } from 'rxjs';
 
 
-class VirtualFile{
+class VirtualFile {
   public file: Files;
   public selected: boolean;
 
-  public constructor(payload : Files, selection :boolean){
+  public constructor(payload: Files, selection: boolean) {
     this.file = payload;
     this.selected = selection;
   }
@@ -28,35 +28,32 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   public FileType = FileType;
   public selectedFolder: Files;
-  public files$ : Observable<Files[]>;
-
+  public files$: Observable<Files[]>;
+  private profile$: Subscription;
 
 
   ngOnInit() {
   }
 
   ngOnDestroy(): void {
-
+    this.clearSub();
   }
 
-  public refreshFiles(){
-    this.files$ = this.spaceServices.getFiles("axel.maciejewski");
-    
-    /*.subscribe(data => {
-      let root = new Files();
-      root.name = "/";
-      root.size = 0;
-      root.type = FileType.FOLDER;
-      root.children = data;
-      data.forEach(file => file.parent = root)
-      this.selectedFolder = root;
-      this.myFiles = data.map(file => new VirtualFile(file, false));
-    });*/
+  private clearSub() {
+    if (this.profile$)
+      this.profile$.unsubscribe();
+  }
 
-    
+  public refreshFiles() {
+    this.clearSub();
+    this.profile$ = this.auth.userProfile$.subscribe(data => {
+      if(data)
+        this.files$ = this.spaceServices.getFiles(data.name)
+    });
   }
 
   constructor(private auth: AuthservicesService, private spaceServices: MyspaceService) {
+
     this.refreshFiles()
   }
 
@@ -70,10 +67,10 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   }
 
   public get TotalSize(): number {
-    return this.selectedFolder.children ? this.selectedFolder.children.filter(data => data.type === FileType.FILE).reduce((acc, cur) => acc + cur.size, 0) : 0 ;
+    return this.selectedFolder.children ? this.selectedFolder.children.filter(data => data.type === FileType.FILE).reduce((acc, cur) => acc + cur.size, 0) : 0;
   }
 
-  public get oneSelection(): boolean{
+  public get oneSelection(): boolean {
     return this.myFiles.some(vf => vf.selected);
   }
 

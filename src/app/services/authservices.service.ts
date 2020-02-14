@@ -6,6 +6,7 @@ import { from, of, Observable, BehaviorSubject, combineLatest, throwError } from
 import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.js';
+import { RabbitmqHubService } from './notifications/rabbitmq-hub.service.js';
 
 
 @Injectable({
@@ -40,7 +41,7 @@ export class AuthservicesService implements OnDestroy {
   // Create a local property for login status
   loggedIn: boolean = null;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, public rabbitQueues: RabbitmqHubService) {
     // On initial load, check authentication state with authorization server
     // Set up local auth streams if user is already authenticated
     this.localAuthSetup();
@@ -123,6 +124,7 @@ export class AuthservicesService implements OnDestroy {
         client_id: environment.auth0.clientId,
         returnTo: `${window.location.origin}`
       });
+      this.rabbitQueues.onLogout();
     });
   }
   ngOnDestroy(): void {
