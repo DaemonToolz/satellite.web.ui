@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthservicesService } from './services/authservices.service';
-import { RabbitmqHubService } from './services/notifications/rabbitmq-hub.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +11,7 @@ import { RabbitmqHubService } from './services/notifications/rabbitmq-hub.servic
 export class AppComponent {
   title = 'Web Manager';
 
-  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, public auth : AuthservicesService, public notifications : RabbitmqHubService){
+  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, public auth : AuthservicesService){
     this.matIconRegistry.addSvgIcon(`web_manager`,this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/images/web-manager.svg`));
     this.matIconRegistry.addSvgIcon(`my_space`,this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/images/my-space.svg`));
     this.matIconRegistry.addSvgIcon(`choices`,this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/images/choices.svg`));

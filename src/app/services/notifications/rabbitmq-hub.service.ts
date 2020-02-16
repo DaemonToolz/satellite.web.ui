@@ -1,78 +1,61 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AuthservicesService } from '../authservices.service';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 
 import { RabbitMqMsg } from 'src/app/Models/process/RabbitMqMsg';
+import * as io from 'socket.io-client';
+import { EventEmitter } from 'protractor';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class RabbitmqHubService implements OnDestroy {
+export class RabbitmqHubService implements OnInit, OnDestroy {
 
+  private socket: SocketIOClient.Socket;
+  private isAuth$: Subscription;
+  private myProfile$: Subscription;
 
-  private rabbitMqAccess: any;
-  private messages$: Subscription
-  private myUser: string;
-  private profile$: Subscription;
+  public readonly mySpaceUpdate: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
 
-  constructor() {
+  constructor(private auth: AuthservicesService) {
+    const self = this;
+    if (this.isAuth$)
+      this.isAuth$.unsubscribe();
+    this.isAuth$ = this.auth.isAuthenticated$.subscribe(isAuth => {
+      if (isAuth) {
+        if (this.socket) {
+          this.socket.disconnect();
+        }
 
-   
+        if (this.myProfile$)
+          this.isAuth$.unsubscribe();
 
+        this.myProfile$ = this.auth.userProfile$.subscribe(profile => {
+          this.socket = io('ws://localhost:20000/', { transports: ['websocket'] });
+          this.socket.on("update", function (payload: RabbitMqMsg) {
+            self.mySpaceUpdate.next(payload);
+          })
+        })
+      }
+    })
   }
 
   ngOnDestroy(): void {
     this.clearSub();
+  }
+
+  private clearSub(): void {
+    if (this.isAuth$)
+      this.isAuth$.unsubscribe();
+
+    if (this.myProfile$)
+      this.isAuth$.unsubscribe();
 
   }
 
   ngOnInit(): void {
 
-  }
-
-  private clearSub() {
-    if (this.messages$)
-      this.messages$.unsubscribe();
-
-    if (this.profile$)
-      this.profile$.unsubscribe();
-  }
-
-  public OnLogin(userProfile$: Observable<any>) {
-    this.clearSub();
-    /*
-    this.profile$ =  userProfile$.subscribe(data => {
-      console.log(data);
-      if (data) {
-        this.rabbitMqAccess = Stomp.overWS('ws://localhost:15674');
-        this.myUser = data;
-        var on_connect = function () {
-          console.log(`${data} is now connected`);
-        };
-
-        var on_error = function () {
-          console.log(`${data} received on error`);
-        };
-
-        this.rabbitMqAccess.connect('system-notifier', 'password', on_connect, on_error, '/');
-        this.messages$ = this.rabbitMqAccess.subscribe(`/topic/user-notification`, this.onMessage, { id: this.myUser });
-      }
-    })
-    */
-  }
-
-  public onLogout() {
-    this.clearSub();
-    this.rabbitMqAccess.disconnect();
-  }
-
-  public onMessage(message: any) {
-    if (message.body) {
-      console.log("got message with body " + message.body)
-    } else {
-      console.log("got empty message");
-    }
   }
 
 

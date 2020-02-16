@@ -5,6 +5,7 @@ import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree'
 import { MyspaceService } from 'src/app/services/spaces/myspace.service';
 import { AuthservicesService } from 'src/app/services/authservices.service';
 import { Observable, Subscription } from 'rxjs';
+import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
 
 
 class VirtualFile {
@@ -30,7 +31,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public selectedFolder: Files;
   public files$: Observable<Files[]>;
   private profile$: Subscription;
-
+  private spaceUpdates$: Subscription;
 
   ngOnInit() {
   }
@@ -42,6 +43,8 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   private clearSub() {
     if (this.profile$)
       this.profile$.unsubscribe();
+    if(this.spaceUpdates$)
+      this.spaceUpdates$.unsubscribe();
   }
 
   public refreshFiles() {
@@ -52,9 +55,9 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor(private auth: AuthservicesService, private spaceServices: MyspaceService) {
-
+  constructor(private auth: AuthservicesService, private spaceServices: MyspaceService, private updaters: RabbitmqHubService) {
     this.refreshFiles()
+    this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {})
   }
 
 
