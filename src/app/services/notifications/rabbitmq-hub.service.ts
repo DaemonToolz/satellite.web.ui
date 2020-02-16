@@ -1,26 +1,33 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AuthservicesService } from '../authservices.service';
 import { Subscription, Observable } from 'rxjs';
 
-declare var require: any;
+import { RabbitMqMsg } from 'src/app/Models/process/RabbitMqMsg';
 
-var Stomp = require('stompjs');
 
 @Injectable({
   providedIn: 'root'
 })
 export class RabbitmqHubService implements OnDestroy {
 
+
   private rabbitMqAccess: any;
   private messages$: Subscription
   private myUser: string;
   private profile$: Subscription;
+
   constructor() {
+
+   
 
   }
 
   ngOnDestroy(): void {
     this.clearSub();
+
+  }
+
+  ngOnInit(): void {
 
   }
 
@@ -34,7 +41,9 @@ export class RabbitmqHubService implements OnDestroy {
 
   public OnLogin(userProfile$: Observable<any>) {
     this.clearSub();
-    this.profile$ = this.profile$ = userProfile$.subscribe(data => {
+    /*
+    this.profile$ =  userProfile$.subscribe(data => {
+      console.log(data);
       if (data) {
         this.rabbitMqAccess = Stomp.overWS('ws://localhost:15674');
         this.myUser = data;
@@ -50,6 +59,7 @@ export class RabbitmqHubService implements OnDestroy {
         this.messages$ = this.rabbitMqAccess.subscribe(`/topic/user-notification`, this.onMessage, { id: this.myUser });
       }
     })
+    */
   }
 
   public onLogout() {

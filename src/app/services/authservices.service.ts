@@ -47,6 +47,8 @@ export class AuthservicesService implements OnDestroy {
     this.localAuthSetup();
     // Handle redirect from Auth0 login
     this.handleAuthCallback();
+
+    this.rabbitQueues.OnLogin(this.userProfile$);
   }
 
   // When calling, options can be passed if desired
@@ -107,6 +109,8 @@ export class AuthservicesService implements OnDestroy {
           ]);
         })
       );
+
+ 
       // Subscribe to authentication completion observable
       // Response will be an array of user and login status
       authComplete$.subscribe(([user, loggedIn]) => {

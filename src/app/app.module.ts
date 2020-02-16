@@ -20,7 +20,7 @@ import { ContactsComponent } from './components/chat/contacts/contacts.component
 import { ContactpageComponent } from './components/chat/contactpage/contactpage.component';
 import { FilterPipe } from './Pipes/filter-pipe.pipe';
 import { UsersService } from './services/contacts/users.service';
-import { ScrollingModule  } from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { DatePipe } from '@angular/common';
@@ -60,7 +60,7 @@ import { MatListModule } from '@angular/material/list'
     NgxChartsModule,
     MatTabsModule,
     ReactiveFormsModule,
-    ScrollingModule ,
+    ScrollingModule,
     BrowserAnimationsModule,
     BrowserModule,
     MatButtonModule,
@@ -77,7 +77,7 @@ import { MatListModule } from '@angular/material/list'
     FlexLayoutModule,
     AppRoutingModule
   ],
-  providers: [AccountDataService,DeactivateGuardService, AuthGuardService, UsersService, DatePipe, HttpInterceptorService],
+  providers: [ AccountDataService, DeactivateGuardService, AuthGuardService, UsersService, DatePipe, HttpInterceptorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
