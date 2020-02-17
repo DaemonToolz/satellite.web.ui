@@ -20,8 +20,10 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
 
   constructor(private auth: AuthservicesService) {
     const self = this;
-    if (this.isAuth$)
+    if (this.isAuth$){
       this.isAuth$.unsubscribe();
+    }
+    
     this.isAuth$ = this.auth.isAuthenticated$.subscribe(isAuth => {
       if (isAuth) {
         if (this.socket) {
@@ -36,6 +38,7 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
           this.socket.on("update", function (payload: RabbitMqMsg) {
             self.mySpaceUpdate.next(payload);
           })
+          this.socket.emit("identify", profile.name);
         })
       }
     })

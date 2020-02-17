@@ -6,6 +6,8 @@ import { MyspaceService } from 'src/app/services/spaces/myspace.service';
 import { AuthservicesService } from 'src/app/services/authservices.service';
 import { Observable, Subscription } from 'rxjs';
 import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
+import { RabbitMqMsg, Status, Priority, InfoType } from 'src/app/Models/process/RabbitMqMsg';
+import { SelectMultipleControlValueAccessor } from '@angular/forms';
 
 
 class VirtualFile {
@@ -25,6 +27,11 @@ class VirtualFile {
 })
 export class MySpaceComponent implements OnInit, OnDestroy {
 
+  // Enums
+  public Status = Status;
+  public Priority = Priority;
+  public InfoType = InfoType;
+
   private myFiles: VirtualFile[] = [];
 
   public FileType = FileType;
@@ -32,6 +39,10 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public files$: Observable<Files[]>;
   private profile$: Subscription;
   private spaceUpdates$: Subscription;
+
+  public currentStatus: RabbitMqMsg;
+  public statuses: RabbitMqMsg[] = [];
+  public initializing: boolean = false;
 
   ngOnInit() {
   }
@@ -43,21 +54,32 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   private clearSub() {
     if (this.profile$)
       this.profile$.unsubscribe();
-    if(this.spaceUpdates$)
+    if (this.spaceUpdates$)
       this.spaceUpdates$.unsubscribe();
   }
 
   public refreshFiles() {
     this.clearSub();
     this.profile$ = this.auth.userProfile$.subscribe(data => {
-      if(data)
+      if (data)
         this.files$ = this.spaceServices.getFiles(data.name)
     });
   }
 
   constructor(private auth: AuthservicesService, private spaceServices: MyspaceService, private updaters: RabbitmqHubService) {
     this.refreshFiles()
-    this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {})
+
+    this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
+      if (data != null) {
+        this.currentStatus = data;
+        this.initializing = data.status != Status.done;
+        this.statuses.push(data);
+
+        if(!this.initializing){
+          this.statuses.splice(0);
+        }
+      }
+    })
   }
 
 

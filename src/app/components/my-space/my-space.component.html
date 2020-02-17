@@ -8,6 +8,7 @@
             <button mat-raised-button>
                 Share a bit of your space !
             </button>
+            
             <button mat-raised-button>
                 Invite a friend !
             </button>
@@ -42,9 +43,18 @@
                 <mat-icon color="warn" *ngIf="oneSelection" >clear</mat-icon>
                 <mat-icon  color="primary" *ngIf="!oneSelection" > done_all</mat-icon>
             </button >
-        
         </mat-toolbar>
-        <mat-action-list role="list">
+
+        <mat-action-list role="list" *ngIf="initializing">
+            <mat-list-item role="listitem" *ngFor="let data of statuses">
+              
+                <h2 mat-line [innerHTML]="data.function"> </h2>
+                <h3 mat-line [innerHTML]="Priority[data.priority]"> </h3>
+                <mat-icon>{{InfoType[data.type]}}</mat-icon>
+            </mat-list-item>
+        </mat-action-list>
+
+        <mat-action-list role="list" *ngIf="!initializing">
             <cdk-virtual-scroll-viewport [itemSize]="30">
                 <mat-list-item role="listitem" *cdkVirtualFor="let node of files$ | async">
                     <!--<mat-checkbox [(ngModel)]="fileDetails(node.name).selected"></mat-checkbox>-->

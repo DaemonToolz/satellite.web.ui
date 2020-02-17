@@ -1,22 +1,22 @@
 export enum Status {
-    ERROR,
-    NEW,
-    ONGOING,
-    DONE
+    error,
+    new,
+    ongoing,
+    done
 }
 
 export enum Priority{
-    LOW,
-    STD,
-    MEDIUM,
-    HIGH,
-    CRITICAL
+    low,
+    standard,
+    medium,
+    high,
+    critical
 }
 
 export enum InfoType{
-    INFO,
-    WARN,
-    ERROR
+    info,
+    warning,
+    error
 }
 
 export class RabbitMqMsg{
