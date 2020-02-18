@@ -3,7 +3,7 @@
         <mat-card-title>
             <h1><b>Welcome to My Space</b></h1>
         </mat-card-title>
-        <mat-card-subtitle>
+        <mat-card-subtitle *ngIf="!initializing">
             <h2> Here you can store everything you want</h2>
             <button mat-raised-button>
                 Share a bit of your space !
@@ -13,6 +13,12 @@
                 Invite a friend !
             </button>
             
+        </mat-card-subtitle>
+        <mat-card-subtitle *ngIf="initializing">
+            <h2> It appears your space has not been created yet </h2>
+            <button mat-raised-button (click)="initializeMySpace()">
+                Initialize my space
+            </button>
         </mat-card-subtitle>
     </mat-card-header>
 

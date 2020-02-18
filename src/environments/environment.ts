@@ -8,7 +8,8 @@ export const environment = {
   auth0: {
     domain: 'dtoolz.eu.auth0.com',
     clientId: 'wDeV68zg6oi0xCYvZFkg0cDjS6EfvtAD',
-    callbackURL: 'http://localhost:4200/'
+    callbackURL: 'http://localhost:4200/',
+    audience: 'api.web-mananger.auth.dev'
   },
 
   services: {

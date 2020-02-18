@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { GenericHttpService } from '../shared/generic-http-client';
 import { Files } from 'src/app/Models/files';
 import { environment } from 'src/environments/environment';
@@ -11,9 +11,18 @@ import { AuthservicesService } from '../authservices.service';
 })
 
 export class MyspaceService extends GenericHttpService<Files> {
+  private myUsername: string;
+  private authSubscription : Subscription;
+
   constructor(_http: HttpClient, private _auth : AuthservicesService) { 
     super(_http)
     this.init(environment.services.myspace);
+
+    this.authSubscription = this._auth.userProfile$.subscribe(result => {
+      if(result != null)
+        this.myUsername = result.name
+    });
+    
   }
 
   public getFiles(name: string){
@@ -21,8 +30,6 @@ export class MyspaceService extends GenericHttpService<Files> {
   }
   
   public initSpace(){
-    this._auth.userProfile$.toPromise().then(data => {
-      this.postAny("spaces/init", {id: data})
-    })
+    this.postAny("spaces/init", JSON.stringify({id: this.myUsername})).subscribe()
   }
 }

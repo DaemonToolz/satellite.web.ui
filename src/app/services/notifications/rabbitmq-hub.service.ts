@@ -34,6 +34,10 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
           this.isAuth$.unsubscribe();
 
         this.myProfile$ = this.auth.userProfile$.subscribe(profile => {
+          if(this.socket){
+            this.socket.close()
+          }
+          
           this.socket = io('ws://localhost:20000/', { transports: ['websocket'] });
           this.socket.on("update", function (payload: RabbitMqMsg) {
             self.mySpaceUpdate.next(payload);

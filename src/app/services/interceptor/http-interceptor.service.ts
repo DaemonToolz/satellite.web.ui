@@ -4,8 +4,9 @@ import {
   HttpHandler,
   HttpEvent
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { tap, mergeMap, catchError } from 'rxjs/operators';
+import { AuthservicesService } from '../authservices.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,20 @@ import { tap } from 'rxjs/operators';
 export class HttpInterceptorService {
 
 
-  constructor() { }
+  constructor(private _auth : AuthservicesService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-   
-    request = request.clone({ setHeaders: { 'Allow-Control-Access-Origin': '*'} });
-    return next.handle(request).pipe(tap(() => {}, (err: any) => {}));
+    return this._auth.getTokenSilently$().pipe(
+      mergeMap(token => {
+        const tokenReq = request.clone({
+          setHeaders: { Authorization: `Bearer ${token}` }
+        });
+        return next.handle(tokenReq);
+      }),
+      catchError(err => throwError(err))
+    );
+    //request = request.clone({ setHeaders: { 'Authorization': this.,'Allow-Control-Access-Origin': '*'} });
+    //return next.handle(request).pipe(tap(() => {}, (err: any) => {}));
   }
 
 

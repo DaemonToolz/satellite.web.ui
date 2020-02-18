@@ -42,7 +42,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   public currentStatus: RabbitMqMsg;
   public statuses: RabbitMqMsg[] = [];
-  public initializing: boolean = false;
+  public initializing: boolean = true;
 
   ngOnInit() {
   }
@@ -72,7 +72,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
       if (data != null) {
         this.currentStatus = data;
-        this.initializing = data.status != Status.done;
+        this.initializing = true; // data.status != Status.done;
         this.statuses.push(data);
 
         if(!this.initializing){
@@ -82,6 +82,9 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     })
   }
 
+  public initializeMySpace(){
+    this.spaceServices.initSpace();
+  }
 
   public fileDetails(filename: string): VirtualFile {
     return this.myFiles.find(data => data.file.name === filename);
