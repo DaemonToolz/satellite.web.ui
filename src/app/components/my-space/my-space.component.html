@@ -56,7 +56,7 @@
               
                 <h2 mat-line [innerHTML]="data.function"> </h2>
                 <h3 mat-line [innerHTML]="Priority[data.priority]"> </h3>
-                <mat-icon>{{InfoType[data.type]}}</mat-icon>
+                <mat-icon  [className]="InfoType[data.type]">{{InfoType[data.type]}}</mat-icon>
             </mat-list-item>
         </mat-action-list>
 

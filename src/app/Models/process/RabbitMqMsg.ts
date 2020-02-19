@@ -15,6 +15,7 @@ export enum Priority{
 
 export enum InfoType{
     info,
+    success,
     warning,
     error
 }
