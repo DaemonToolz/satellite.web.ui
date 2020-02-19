@@ -50,3 +50,19 @@ cdk-virtual-scroll-viewport{
     display:flex;
     justify-content: space-evenly;
   }
+
+  .error {
+    color: red;
+  }
+
+  .warning{
+    color: orange;
+  }
+
+  .info {
+    color: darkblue;
+  }
+
+  mat-progress-spinner{
+    float : left;
+  }

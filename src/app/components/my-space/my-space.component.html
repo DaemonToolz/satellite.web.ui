@@ -12,11 +12,11 @@
             <button mat-raised-button>
                 Invite a friend !
             </button>
-            
+    
         </mat-card-subtitle>
         <mat-card-subtitle *ngIf="initializing">
             <h2> It appears your space has not been created yet </h2>
-            <button mat-raised-button (click)="initializeMySpace()">
+            <button mat-raised-button *ngIf="!loading" (click)="initializeMySpace()">
                 Initialize my space
             </button>
         </mat-card-subtitle>
@@ -53,11 +53,11 @@
 
         <mat-action-list role="list" *ngIf="initializing">
             <mat-list-item role="listitem" *ngFor="let data of statuses | keyvalue">
-              
+
                 <h2 mat-line [innerHTML]="data.value.function"> </h2>
-                <h3 mat-line [innerHTML]="Priority[data.value.priority]"> </h3>
-                <p></p>
-                <mat-icon>{{InfoType[data.value.type]}}</mat-icon>
+                <p mat-line  [innerHTML]="data.value.payload"></p>
+                <mat-progress-spinner *ngIf="isOngoing(data.value)" diameter="32" strokeWidth="5" mode="indeterminate"></mat-progress-spinner>
+                <mat-icon *ngIf="!isOngoing(data.value)" [className]="InfoType[data.value.type]">{{InfoType[data.value.type]}}</mat-icon>
             </mat-list-item>
         </mat-action-list>
 

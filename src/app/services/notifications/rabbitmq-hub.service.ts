@@ -44,7 +44,9 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
           })
 
           this.socket.on("space_validation", function (payload: string) {
-            self.mySpaceUpdate.next(null);
+            let tmp = new RabbitMqMsg();
+            tmp.payload = payload;
+            self.mySpaceUpdate.next(tmp);
           })
 
 

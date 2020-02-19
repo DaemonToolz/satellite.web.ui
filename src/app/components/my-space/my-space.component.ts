@@ -42,7 +42,9 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   public currentStatus: RabbitMqMsg;
   public statuses: Map<string, RabbitMqMsg> = new Map();
+  
   public initializing: boolean = true;
+  public loading: boolean = false;
 
   ngOnInit() {
   }
@@ -52,6 +54,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   }
 
   private clearSub() {
+    
     if (this.profile$)
       this.profile$.unsubscribe();
     if (this.spaceUpdates$)
@@ -61,8 +64,10 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public refreshFiles() {
     this.clearSub();
     this.profile$ = this.auth.userProfile$.subscribe(data => {
-      if (data)
+      if (data){
         this.files$ = this.spaceServices.getFiles(data.name)
+      }
+      
     });
   }
 
@@ -71,22 +76,26 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
     this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
       if (data != null) {
-        this.currentStatus = data;
-
-        this.initializing = true; // data.status != Status.done;
-        this.statuses.set(data.id, data);
-
-        if(!this.initializing){
+        if (data.payload != null && data.payload === "validated") {
+          this.initializing = false;
           this.statuses.clear();
+          this.refreshFiles()
+          this.loading = false;
+        } else {
+          this.currentStatus = data;
+
+          this.initializing = true; // data.status != Status.done;
+          this.statuses.set(data.id, data);
+
+     
         }
-      } else {
-        this.initializing = false;
       }
     })
   }
 
-  public initializeMySpace(){
+  public initializeMySpace() {
     this.spaceServices.initSpace();
+    this.loading = true;
   }
 
   public fileDetails(filename: string): VirtualFile {
@@ -105,4 +114,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     return this.myFiles.some(vf => vf.selected);
   }
 
+  public isOngoing(data: RabbitMqMsg): boolean {
+    return data.status === Status.ongoing
+  }
 }

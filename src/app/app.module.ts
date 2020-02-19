@@ -37,7 +37,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatListModule } from '@angular/material/list'
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,6 +73,7 @@ import { MatListModule } from '@angular/material/list'
     MatFormFieldModule,
     MatSidenavModule,
     MatListModule,
+    MatProgressSpinnerModule,
     MatCheckboxModule,
     FlexLayoutModule,
     AppRoutingModule
