@@ -24,6 +24,8 @@ export class RabbitMqMsg{
     public priority: Priority;
     public Type: InfoType;
 
+
+    public id: string;
     public function: string;
     public to: string;
     public payload: string; 

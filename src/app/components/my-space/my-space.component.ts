@@ -41,7 +41,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   private spaceUpdates$: Subscription;
 
   public currentStatus: RabbitMqMsg;
-  public statuses: RabbitMqMsg[] = [];
+  public statuses: Map<string, RabbitMqMsg> = new Map();
   public initializing: boolean = true;
 
   ngOnInit() {
@@ -72,12 +72,15 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
       if (data != null) {
         this.currentStatus = data;
+
         this.initializing = true; // data.status != Status.done;
-        this.statuses.push(data);
+        this.statuses.set(data.id, data);
 
         if(!this.initializing){
-          this.statuses.splice(0);
+          this.statuses.clear();
         }
+      } else {
+        this.initializing = false;
       }
     })
   }

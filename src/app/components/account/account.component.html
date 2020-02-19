@@ -5,10 +5,10 @@
     <mat-card-header>
      
         <mat-card-title>
-            <h1><b>My Account</b></h1>
+            <h1><strong>My Account</strong></h1>
         </mat-card-title>
         <mat-card-subtitle>
-            <h2><b [innerHTML]="(myProfile | async).name"></b></h2>
+            <h2><b [innerHTML]="(myProfile | async).name"></strong></h2>
         </mat-card-subtitle>
 
 
@@ -19,7 +19,7 @@
             <mat-grid-tile>
                 <div class="grid-content">
                     <div class="sub-content">
-                        <span><b> Member since </b></span>
+                        <span><strong> Member since </strong></span>
                         <span [innerHTML]="(myProfile | async).created_at  | date : 'dd-MM-yyyy HH:mm:ss'"> </span>
                     </div>
                 </div>
@@ -28,11 +28,11 @@
             <mat-grid-tile>
                 <div class="grid-content">
                     <div class="sub-content">
-                        <span><b> Account type </b></span>
+                        <span><strong> Account type </strong></span>
                         <span> Standard </span>
                     </div>
                     <div class="sub-content">
-                        <span><b>Points</b></span>
+                        <span><strong>Points</strong></span>
                         <span> 500 </span>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
             <mat-grid-tile>
                 <div class="grid-content">
                     <div class="sub-content">
-                        <span><b> Bla bla bla </b></span>
+                        <span><strong> Bla bla bla </strong></span>
                         <span> bla bla bla </span>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
 
 <mat-card>
     <mat-card-header>
-        <h1><b>My Dashboard</b></h1>
+        <h1><strong>My Dashboard</strong></h1>
     </mat-card-header>
     <mat-card-content>
         <mat-tab-group dynamicHeight>
@@ -81,7 +81,7 @@
 
 <mat-card>
     <mat-card-header>
-        <h1><b>My Settings</b></h1>
+        <h1><strong>My Settings</strong></h1>
     </mat-card-header>
     <mat-card-content>
         <mat-tab-group dynamicHeight>

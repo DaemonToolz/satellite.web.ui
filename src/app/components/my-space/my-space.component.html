@@ -1,7 +1,7 @@
 <mat-card>
     <mat-card-header>
         <mat-card-title>
-            <h1><b>Welcome to My Space</b></h1>
+            <h1><strong>Welcome to My Space</strong></h1>
         </mat-card-title>
         <mat-card-subtitle *ngIf="!initializing">
             <h2> Here you can store everything you want</h2>
@@ -24,7 +24,7 @@
 
     <mat-card-content>
         <div>
-            <h2><b>Current folder : {{ AbsolutePath(selectedFolder) }}</b></h2>
+            <h2><strong>Current folder : {{ AbsolutePath(selectedFolder) }}</strong></h2>
             <!--
             <h3>Number of files in this folder : {{selectedFolder.children.length}}</h3>
             <h3>Total size : {{TotalSize}} KB</h3>
@@ -52,11 +52,12 @@
         </mat-toolbar>
 
         <mat-action-list role="list" *ngIf="initializing">
-            <mat-list-item role="listitem" *ngFor="let data of statuses">
+            <mat-list-item role="listitem" *ngFor="let data of statuses | keyvalue">
               
-                <h2 mat-line [innerHTML]="data.function"> </h2>
-                <h3 mat-line [innerHTML]="Priority[data.priority]"> </h3>
-                <mat-icon>{{InfoType[data.type]}}</mat-icon>
+                <h2 mat-line [innerHTML]="data.value.function"> </h2>
+                <h3 mat-line [innerHTML]="Priority[data.value.priority]"> </h3>
+                <p></p>
+                <mat-icon>{{InfoType[data.value.type]}}</mat-icon>
             </mat-list-item>
         </mat-action-list>
 
@@ -68,7 +69,7 @@
                     <button mat-icon-button class="mat-24 centered file-type">
                         <mat-icon svgIcon="{{ FileType[node.type] | lowercase }}"></mat-icon>
                     </button>
-                    <h2 mat-line><b>{{node.name}}</b></h2>
+                    <h2 mat-line><strong>{{node.name}}</strong></h2>
 
 
                     <h3 mat-line *ngIf="node.type !== FileType.FOLDER">

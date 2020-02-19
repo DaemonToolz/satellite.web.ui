@@ -39,9 +39,15 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
           }
           
           this.socket = io('ws://localhost:20000/', { transports: ['websocket'] });
-          this.socket.on("update", function (payload: RabbitMqMsg) {
+          this.socket.on("space_update", function (payload: RabbitMqMsg) {
             self.mySpaceUpdate.next(payload);
           })
+
+          this.socket.on("space_validation", function (payload: string) {
+            self.mySpaceUpdate.next(null);
+          })
+
+
           this.socket.emit("identify", profile.name);
         })
       }
