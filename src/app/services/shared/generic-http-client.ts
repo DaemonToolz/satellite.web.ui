@@ -30,20 +30,30 @@ export class GenericHttpService<T> {
     return this._http.post<T>(`${this._endpoint}/${ressource}`, body);
   }
 
+  protected postArray(ressource:string, body: any): Observable<T[]>{
+    // Ajouter authorizationheader
+    return this._http.post<T[]>(`${this._endpoint}/${ressource}`, body);
+  }
+
   protected put<T>(ressource:string, body: T): Observable<any>{
     // Ajouter authorizationheader
     return this._http.put<T>(`${this._endpoint}/${ressource}`, body);
   }
   
-  
-  protected postAny(ressource:string, body: any): Observable<any>{
+  protected getAny<A>(ressource: string): Observable<A>{
     // Ajouter authorizationheader
-    return this._http.post(`${this._endpoint}/${ressource}`, body);
+    return this._http.get<A>(`${this._endpoint}/${ressource}`);
   }
 
-  protected putAny(ressource:string, body: any): Observable<any>{
+  
+  protected postAny<A>(ressource:string, body: any): Observable<A>{
     // Ajouter authorizationheader
-    return this._http.put(`${this._endpoint}/${ressource}`, body);
+    return this._http.post<A>(`${this._endpoint}/${ressource}`, body);
+  }
+
+  protected putAny<A>(ressource:string, body: any): Observable<A>{
+    // Ajouter authorizationheader
+    return this._http.put<A>(`${this._endpoint}/${ressource}`, body);
   }
 
 }

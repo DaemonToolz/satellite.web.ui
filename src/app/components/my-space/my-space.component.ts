@@ -8,6 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
 import { RabbitMqMsg, Status, Priority, InfoType } from 'src/app/Models/process/RabbitMqMsg';
 import { SelectMultipleControlValueAccessor } from '@angular/forms';
+import { ThrowStmt } from '@angular/compiler';
 
 
 class VirtualFile {
@@ -42,19 +43,22 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   public currentStatus: RabbitMqMsg;
   public statuses: Map<string, RabbitMqMsg> = new Map();
-  
+
   public initializing: boolean = true;
   public loading: boolean = false;
+
+  private onFolderChanged$ : Subscription;
 
   ngOnInit() {
   }
 
   ngOnDestroy(): void {
     this.clearSub();
+    this.onFolderChanged$.unsubscribe();
   }
 
   private clearSub() {
-    
+
     if (this.profile$)
       this.profile$.unsubscribe();
     if (this.spaceUpdates$)
@@ -64,39 +68,46 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public refreshFiles() {
     this.clearSub();
     this.profile$ = this.auth.userProfile$.subscribe(data => {
-      if (data){
-        this.files$ = this.spaceServices.getFiles(data.name)
+      if (data) {
+        this.spaceServices.updateExists()
+        this.files$ = this.spaceServices.getCurrentFolder()
       }
-      
+
     });
   }
 
-  constructor(private auth: AuthservicesService, private spaceServices: MyspaceService, private updaters: RabbitmqHubService) {
-    this.refreshFiles()
+  constructor(private auth: AuthservicesService, public spaceServices: MyspaceService, private updaters: RabbitmqHubService) {
+   
+    
+    this.onFolderChanged$ = this.spaceServices.folderChanged.subscribe(data => {
+      this.refreshFiles();
+    });
 
-    this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
-      if (data != null) {
-        if (data.payload != null && data.payload === "validated") {
-          this.initializing = false;
-          this.statuses.clear();
-          this.refreshFiles()
-          this.loading = false;
-        } else {
-          this.currentStatus = data;
 
-          this.initializing = true; // data.status != Status.done;
-          this.statuses.set(data.id, data);
+    if (!this.spaceServices.isSpaceValid) {
+      this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
+        if (data != null) {
+          if (data.payload != null && data.payload === "validated") {
+            this.initializing = false;
+            this.statuses.clear();
+            this.refreshFiles()
+            this.loading = false;
+          } else {
+            this.currentStatus = data;
 
-     
+            this.initializing = true; // data.status != Status.done;
+            this.statuses.set(data.id, data);
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   public initializeMySpace() {
     this.spaceServices.initSpace();
     this.loading = true;
   }
+
 
   public fileDetails(filename: string): VirtualFile {
     return this.myFiles.find(data => data.file.name === filename);
@@ -116,5 +127,17 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   public isOngoing(data: RabbitMqMsg): boolean {
     return data.status === Status.ongoing
+  }
+
+  public setCurrentFolder(node: Files){
+    if(node?.type === FileType.FOLDER){
+      this.spaceServices.CurrentFolder = node.name;
+    }
+  }
+
+  public travelTo(index : number){
+    if(index >= 0 && index < this.spaceServices.folders.length){
+      this.spaceServices.TravelBack = index;
+    }
   }
 }

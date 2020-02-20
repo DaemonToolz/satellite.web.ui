@@ -26,8 +26,6 @@ export class HttpInterceptorService {
       }),
       catchError(err => throwError(err))
     );
-    //request = request.clone({ setHeaders: { 'Authorization': this.,'Allow-Control-Access-Origin': '*'} });
-    //return next.handle(request).pipe(tap(() => {}, (err: any) => {}));
   }
 
 

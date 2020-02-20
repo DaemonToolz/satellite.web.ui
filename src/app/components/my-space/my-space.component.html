@@ -3,7 +3,7 @@
         <mat-card-title>
             <h1><strong>Welcome to My Space</strong></h1>
         </mat-card-title>
-        <mat-card-subtitle *ngIf="!initializing">
+        <mat-card-subtitle *ngIf="spaceServices.isSpaceValid">
             <h2> Here you can store everything you want</h2>
             <button mat-raised-button>
                 Share a bit of your space !
@@ -14,7 +14,7 @@
             </button>
     
         </mat-card-subtitle>
-        <mat-card-subtitle *ngIf="initializing">
+        <mat-card-subtitle *ngIf="!spaceServices.isSpaceValid">
             <h2> It appears your space has not been created yet </h2>
             <button mat-raised-button *ngIf="!loading" (click)="initializeMySpace()">
                 Initialize my space
@@ -23,12 +23,12 @@
     </mat-card-header>
 
     <mat-card-content>
+     
         <div>
-            <h2><strong>Current folder : {{ AbsolutePath(selectedFolder) }}</strong></h2>
-            <!--
-            <h3>Number of files in this folder : {{selectedFolder.children.length}}</h3>
-            <h3>Total size : {{TotalSize}} KB</h3>
-            -->
+            <h2><strong>Current folder : {{ spaceServices.absolutePath }}</strong></h2>
+            <strong>Access folders</strong>
+            <button mat-raised-button *ngFor="let value of spaceServices.folders; let i = index;" (click)="travelTo(i)">{{value}}</button>
+  
         </div>
         <mat-toolbar>
             <button class="centered"  mat-icon-button>
@@ -51,7 +51,7 @@
             </button >
         </mat-toolbar>
 
-        <mat-action-list role="list" *ngIf="initializing">
+        <mat-action-list role="list" *ngIf="!spaceServices.isSpaceValid">
             <mat-list-item role="listitem" *ngFor="let data of statuses | keyvalue">
 
                 <h2 mat-line [innerHTML]="data.value.function"> </h2>
@@ -61,9 +61,9 @@
             </mat-list-item>
         </mat-action-list>
 
-        <mat-action-list role="list" *ngIf="!initializing">
+        <mat-action-list role="list" *ngIf="spaceServices.isSpaceValid">
             <cdk-virtual-scroll-viewport [itemSize]="30">
-                <mat-list-item role="listitem" *cdkVirtualFor="let node of files$ | async">
+                <mat-list-item role="listitem" *cdkVirtualFor="let node of files$ | async" (click)="setCurrentFolder(node); $event.stopPropagation()">
                     <!--<mat-checkbox [(ngModel)]="fileDetails(node.name).selected"></mat-checkbox>-->
 
                     <button mat-icon-button class="mat-24 centered file-type">
