@@ -24,13 +24,13 @@
 
     <mat-card-content>
      
-        <div>
+        <div *ngIf="spaceServices.isSpaceValid">
             <h2><strong>Current folder : {{ spaceServices.absolutePath }}</strong></h2>
             <strong>Access folders</strong>
             <button mat-raised-button *ngFor="let value of spaceServices.folders; let i = index;" (click)="travelTo(i)">{{value}}</button>
   
         </div>
-        <mat-toolbar>
+        <mat-toolbar *ngIf="spaceServices.isSpaceValid">
             <button class="centered"  mat-icon-button>
                 <mat-icon>note_add</mat-icon>
             </button >
@@ -76,19 +76,19 @@
                         Size : {{ node.size / 1000}} KB
                     </h3>
 
-                    <button mat-icon-button class="mat-24 centered">
+                    <button mat-icon-button (click)="$event.stopPropagation()" class="mat-24 centered">
                         <mat-icon>cloud_download</mat-icon>
                     </button>
 
-                    <button mat-icon-button class="mat-24 centered">
+                    <button mat-icon-button (click)="$event.stopPropagation()" class="mat-24 centered">
                         <mat-icon>remove_red_eye</mat-icon>
                     </button>
 
-                    <button mat-icon-button class="mat-24 centered">
+                    <button mat-icon-button (click)="$event.stopPropagation()" class="mat-24 centered">
                         <mat-icon>settings_applications</mat-icon>
                     </button>
 
-                    <button mat-icon-button color="warn" class="mat-24 centered">
+                    <button mat-icon-button (click)="$event.stopPropagation()" color="warn" class="mat-24 centered">
                         <mat-icon>delete_forever</mat-icon>
                     </button>
 

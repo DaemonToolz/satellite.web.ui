@@ -9,7 +9,7 @@ export const environment = {
     domain: 'dtoolz.eu.auth0.com',
     clientId: 'wDeV68zg6oi0xCYvZFkg0cDjS6EfvtAD',
     callbackURL: 'http://localhost:4200/',
-    audience: 'api.web-mananger.auth.dev'
+    audience: 'https://dtoolz.eu.auth0.com' //'api.web-mananger.auth.dev'
   },
 
   services: {

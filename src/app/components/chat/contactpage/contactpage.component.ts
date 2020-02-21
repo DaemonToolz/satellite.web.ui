@@ -9,7 +9,7 @@ import { UsersService } from 'src/app/services/contacts/users.service';
 })
 export class ContactpageComponent implements OnInit {
 
-  constructor(private _userService : UsersService) { 
+  constructor(public _userService : UsersService) { 
 
 
   }

@@ -17,7 +17,7 @@ export class AuthservicesService implements OnDestroy {
       domain: environment.auth0.domain,
       client_id: environment.auth0.clientId,
       redirect_uri: `${window.location.origin}`,
-      audience: environment.auth0.audience
+      audience: `${environment.auth0.audience}/userinfo`
     })
   ) as Observable<Auth0Client>).pipe(
     shareReplay(1), // Every subscription receives the same shared value

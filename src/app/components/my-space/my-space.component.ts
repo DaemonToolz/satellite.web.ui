@@ -43,30 +43,29 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   public currentStatus: RabbitMqMsg;
   public statuses: Map<string, RabbitMqMsg> = new Map();
-
-  public initializing: boolean = true;
   public loading: boolean = false;
 
-  private onFolderChanged$ : Subscription;
+  private onFolderChanged$: Subscription;
 
   ngOnInit() {
   }
 
   ngOnDestroy(): void {
     this.clearSub();
+    if(this.spaceUpdates$){
+      this.spaceUpdates$.unsubscribe();
+    }
     this.onFolderChanged$.unsubscribe();
   }
 
   private clearSub() {
-
     if (this.profile$)
       this.profile$.unsubscribe();
-    if (this.spaceUpdates$)
-      this.spaceUpdates$.unsubscribe();
   }
 
   public refreshFiles() {
     this.clearSub();
+
     this.profile$ = this.auth.userProfile$.subscribe(data => {
       if (data) {
         this.spaceServices.updateExists()
@@ -77,30 +76,29 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   }
 
   constructor(private auth: AuthservicesService, public spaceServices: MyspaceService, private updaters: RabbitmqHubService) {
-   
-    
+
     this.onFolderChanged$ = this.spaceServices.folderChanged.subscribe(data => {
       this.refreshFiles();
     });
+    this.initListener();
 
+  }
 
-    if (!this.spaceServices.isSpaceValid) {
-      this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
-        if (data != null) {
-          if (data.payload != null && data.payload === "validated") {
-            this.initializing = false;
-            this.statuses.clear();
-            this.refreshFiles()
-            this.loading = false;
-          } else {
-            this.currentStatus = data;
+  private initListener() {
 
-            this.initializing = true; // data.status != Status.done;
-            this.statuses.set(data.id, data);
-          }
+    this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
+      if (data != null) {
+        if (data.payload != null && data.payload === "validated") {
+          this.statuses.clear();
+          this.refreshFiles()
+          this.loading = false;
+        } else {
+          this.currentStatus = data;
+          this.statuses.set(data.id, data);
         }
-      })
-    }
+      }
+    })
+
   }
 
   public initializeMySpace() {
@@ -129,14 +127,14 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     return data.status === Status.ongoing
   }
 
-  public setCurrentFolder(node: Files){
-    if(node?.type === FileType.FOLDER){
+  public setCurrentFolder(node: Files) {
+    if (node?.type === FileType.FOLDER) {
       this.spaceServices.CurrentFolder = node.name;
     }
   }
 
-  public travelTo(index : number){
-    if(index >= 0 && index < this.spaceServices.folders.length){
+  public travelTo(index: number) {
+    if (index >= 0 && index < this.spaceServices.folders.length) {
       this.spaceServices.TravelBack = index;
     }
   }
