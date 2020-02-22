@@ -75,4 +75,8 @@ export class MyspaceService extends GenericHttpService<Files> {
   public get absolutePath(): string{
     return this.folders.join("/");
   }
+
+  public get myConfig(): SpaceValidation{
+    return this.mySpaceConfig;
+  }
 }

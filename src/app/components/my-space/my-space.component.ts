@@ -6,9 +6,10 @@ import { MyspaceService } from 'src/app/services/spaces/myspace.service';
 import { AuthservicesService } from 'src/app/services/authservices.service';
 import { Observable, Subscription } from 'rxjs';
 import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
-import { RabbitMqMsg, Status, Priority, InfoType } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, Status, Priority, InfoType, ProcessFunction } from 'src/app/Models/process/RabbitMqMsg';
 import { SelectMultipleControlValueAccessor } from '@angular/forms';
 import { ThrowStmt } from '@angular/compiler';
+import { SpaceValidation } from 'src/app/Models/space';
 
 
 class VirtualFile {
@@ -93,12 +94,28 @@ export class MySpaceComponent implements OnInit, OnDestroy {
           this.refreshFiles()
           this.loading = false;
         } else {
-          this.currentStatus = data;
-          this.statuses.set(data.id, data);
+          this.notify(data);
+          
         }
       }
     })
 
+  }
+
+  private notify(data: RabbitMqMsg){
+    let operation = ProcessFunction[data.function];
+
+    switch(operation){
+      case ProcessFunction.CreateSpace:
+        this.currentStatus = data;
+        this.statuses.set(data.id, data);
+        break;
+      case ProcessFunction.FileWatch:
+        this.refreshFiles()
+        break;
+    }
+    
+    
   }
 
   public initializeMySpace() {
@@ -137,5 +154,9 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     if (index >= 0 && index < this.spaceServices.folders.length) {
       this.spaceServices.TravelBack = index;
     }
+  }
+
+  public get myConfig() : SpaceValidation{
+    return this.spaceServices.myConfig;
   }
 }

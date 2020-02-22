@@ -31,3 +31,8 @@ export class RabbitMqMsg{
     public to: string;
     public payload: string; 
 }
+
+export enum ProcessFunction{
+    CreateSpace,
+    FileWatch
+}

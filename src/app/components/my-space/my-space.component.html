@@ -13,6 +13,8 @@
                 Invite a friend !
             </button>
     
+            <mat-div></mat-div>
+            <h3>Created on <strong [innerHTML]="(myConfig?.created_at | date: 'dd-MM-yyyy')"></strong></h3>
         </mat-card-subtitle>
         <mat-card-subtitle *ngIf="!spaceServices.isSpaceValid">
             <h2> It appears your space has not been created yet </h2>

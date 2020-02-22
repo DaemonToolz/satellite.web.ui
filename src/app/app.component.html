@@ -4,12 +4,12 @@
         <span>Web Manager</span>
     </a>
 
-    <a *ngIf="(auth.isAuthenticated$ | async)"  mat-button routerLink="/myspace" >
+    <a *ngIf="(isAuthenticated)"  mat-button routerLink="/myspace" >
         <mat-icon svgIcon="my_space"> </mat-icon>
         <span> My Space</span>
     </a>
 
-    <button *ngIf="(auth.isAuthenticated$ | async)"  mat-button (click)="drawer.toggle()">
+    <button *ngIf="(isAuthenticated)"  mat-button (click)="drawer.toggle()">
         <mat-icon  svgIcon="choices"> </mat-icon>
         <span>Chat</span>
     </button>
@@ -22,23 +22,23 @@
         <mat-icon>help_outline</mat-icon> 
     </button>
     
-    <button *ngIf="(auth.isAuthenticated$ | async)" class="centered" mat-icon-button >
+    <button *ngIf="(isAuthenticated)" class="centered" mat-icon-button >
         <mat-icon> notifications</mat-icon>
     </button>
 
-    <a *ngIf="(auth.isAuthenticated$ | async)"  mat-button routerLink="/account" >
+    <a *ngIf="(isAuthenticated)"  mat-button routerLink="/account" >
         <mat-icon> account_circle</mat-icon>
-        <span [innerHTML]="(myProfile | async).name"></span>
+        <span [innerHTML]="(myProfile).name"></span>
     </a>
 
-    <button *ngIf="! (auth.isAuthenticated$ | async)"  mat-button (click)="login()" >
+    <button *ngIf="!(isAuthenticated)"  mat-button (click)="login()" >
         <mat-icon> account_circle</mat-icon>
         <span>Log in</span>
     </button>
 </mat-toolbar>
 <mat-drawer-container class="main-container" autosize>
     <mat-drawer mode="side" #drawer>
-        <app-navbar *ngIf="(auth.isAuthenticated$ | async)"></app-navbar>
+        <app-navbar *ngIf="(isAuthenticated)"></app-navbar>
     </mat-drawer>
     <mat-drawer-content>
         <router-outlet></router-outlet>
