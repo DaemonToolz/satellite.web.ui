@@ -5,7 +5,7 @@ export enum Status {
     done
 }
 
-export enum Priority{
+export enum Priority {
     low,
     standard,
     medium,
@@ -13,15 +13,15 @@ export enum Priority{
     critical
 }
 
-export enum InfoType{
+export enum InfoType {
     info,
     success,
     warning,
     error
 }
 
-export class RabbitMqMsg{
-    public status : Status;
+export class RabbitMqMsg {
+    public status: Status;
     public priority: Priority;
     public Type: InfoType;
 
@@ -29,10 +29,13 @@ export class RabbitMqMsg{
     public id: string;
     public function: string;
     public to: string;
-    public payload: string; 
+    public payload: string;
 }
 
-export enum ProcessFunction{
-    CreateSpace,
-    FileWatch
+export enum ProcessFunction {
+    MySpaceUpdate = "myspace.space_update",
+    MySpaceValidate = "myspace.space_validation",
+    FilewatchNotify = "filewatch.notify",
+    FilewatchSysUpd = "filewatch.system_updates",
 }
+

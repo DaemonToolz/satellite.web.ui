@@ -33,6 +33,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public Status = Status;
   public Priority = Priority;
   public InfoType = InfoType;
+  public ProcessFunction = ProcessFunction;
 
   private myFiles: VirtualFile[] = [];
 
@@ -89,28 +90,24 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
     this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
       if (data != null) {
-        if (data.payload != null && data.payload === "validated") {
-          this.statuses.clear();
-          this.refreshFiles()
-          this.loading = false;
-        } else {
-          this.notify(data);
-          
-        }
+        this.notify(data)
       }
     })
 
   }
 
   private notify(data: RabbitMqMsg){
-    let operation = ProcessFunction[data.function];
-
-    switch(operation){
-      case ProcessFunction.CreateSpace:
+    switch(data.function){
+      case ProcessFunction.MySpaceValidate:
+        this.statuses.clear();
+        this.refreshFiles()
+        this.loading = false;
+        break;
+      case ProcessFunction.MySpaceUpdate:
         this.currentStatus = data;
         this.statuses.set(data.id, data);
         break;
-      case ProcessFunction.FileWatch:
+      case ProcessFunction.FilewatchNotify:
         this.refreshFiles()
         break;
     }
@@ -159,4 +156,7 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public get myConfig() : SpaceValidation{
     return this.spaceServices.myConfig;
   }
+
+
+
 }

@@ -37,7 +37,8 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatListModule } from '@angular/material/list'
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NotificationsComponent } from './shared/notifications/notifications.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +54,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
     FilterPipe,
     NotFoundComponent,
     CalendarComponent,
+    NotificationsComponent,
   ],
   imports: [
     FormsModule,

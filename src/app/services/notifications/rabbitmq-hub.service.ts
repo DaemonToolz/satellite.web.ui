@@ -17,6 +17,8 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
   private myProfile$: Subscription;
 
   public readonly mySpaceUpdate: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
+  public readonly myFilewatch: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
+
 
   constructor(private auth: AuthservicesService) {
     const self = this;
@@ -39,14 +41,24 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
           }
           
           this.socket = io('ws://localhost:20000/', { transports: ['websocket'] });
-          this.socket.on("space_update", function (payload: RabbitMqMsg) {
+          this.socket.on("myspace.space_update", function (payload: RabbitMqMsg) {
             self.mySpaceUpdate.next(payload);
           })
 
-          this.socket.on("space_validation", function (payload: string) {
+          this.socket.on("myspace.space_validation", function (payload: string) {
             let tmp = new RabbitMqMsg();
             tmp.payload = payload;
             self.mySpaceUpdate.next(tmp);
+          })
+
+          this.socket.on("filewatch.notify", function (payload: RabbitMqMsg) {
+
+            self.mySpaceUpdate.next(payload);
+          })
+
+          this.socket.on("filewatch.system_updates", function (payload: RabbitMqMsg) {
+
+            self.myFilewatch.next(payload);
           })
 
 
