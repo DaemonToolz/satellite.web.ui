@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
 import { Subscription } from 'rxjs';
-import { RabbitMqMsg } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, Status, Priority, InfoType, ProcessFunction } from 'src/app/Models/process/RabbitMqMsg';
 
 @Component({
   selector: 'app-notifications',
@@ -11,8 +11,13 @@ import { RabbitMqMsg } from 'src/app/Models/process/RabbitMqMsg';
 export class NotificationsComponent implements OnInit {
 
   private myWatcher : Subscription;
-  public statuses: Array<RabbitMqMsg> = [];
 
+  public Status = Status;
+  public Priority = Priority;
+  public InfoType = InfoType;
+  public ProcessFunction = ProcessFunction;
+
+  
   constructor(private hub : RabbitmqHubService) {
     this.initListener();  
   }
@@ -24,10 +29,13 @@ export class NotificationsComponent implements OnInit {
   private initListener() {
 
     this.myWatcher = this.hub.myFilewatch.subscribe(data => {
-      this.statuses.push(data);
+
     })
 
   }
 
+  public get notifications(): Array<RabbitMqMsg>{
+    return this.hub.notifications;
+  }
 
 }

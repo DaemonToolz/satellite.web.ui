@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
 
 @Component({
   selector: 'app-navbar',

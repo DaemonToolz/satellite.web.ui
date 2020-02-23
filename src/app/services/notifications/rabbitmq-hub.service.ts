@@ -19,13 +19,14 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
   public readonly mySpaceUpdate: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
   public readonly myFilewatch: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
 
+  public notifications: Array<RabbitMqMsg> = [];
 
   constructor(private auth: AuthservicesService) {
     const self = this;
-    if (this.isAuth$){
+    if (this.isAuth$) {
       this.isAuth$.unsubscribe();
     }
-    
+
     this.isAuth$ = this.auth.isAuthenticated$.subscribe(isAuth => {
       if (isAuth) {
         if (this.socket) {
@@ -36,33 +37,33 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
           this.isAuth$.unsubscribe();
 
         this.myProfile$ = this.auth.userProfile$.subscribe(profile => {
-          if(this.socket){
-            this.socket.close()
+          if (profile != null) {
+
+            if (this.socket) {
+              this.socket.close()
+            }
+
+            this.socket = io('ws://localhost:20000/', { transports: ['websocket'] });
+            this.socket.on("myspace.space_update", function (payload: RabbitMqMsg) {
+              self.mySpaceUpdate.next(payload);
+            })
+
+            this.socket.on("myspace.space_validation", function (payload: RabbitMqMsg) {
+              self.mySpaceUpdate.next(payload);
+            })
+
+            this.socket.on("filewatch.notify", function (payload: RabbitMqMsg) {
+
+              self.mySpaceUpdate.next(payload);
+            })
+
+            this.socket.on("filewatch.system_updates", function (payload: RabbitMqMsg) {
+              self.notifications.push(payload);
+              self.myFilewatch.next(payload);
+            })
+
+            this.socket.emit("identify", profile.name);
           }
-          
-          this.socket = io('ws://localhost:20000/', { transports: ['websocket'] });
-          this.socket.on("myspace.space_update", function (payload: RabbitMqMsg) {
-            self.mySpaceUpdate.next(payload);
-          })
-
-          this.socket.on("myspace.space_validation", function (payload: string) {
-            let tmp = new RabbitMqMsg();
-            tmp.payload = payload;
-            self.mySpaceUpdate.next(tmp);
-          })
-
-          this.socket.on("filewatch.notify", function (payload: RabbitMqMsg) {
-
-            self.mySpaceUpdate.next(payload);
-          })
-
-          this.socket.on("filewatch.system_updates", function (payload: RabbitMqMsg) {
-
-            self.myFilewatch.next(payload);
-          })
-
-
-          this.socket.emit("identify", profile.name);
         })
       }
     })

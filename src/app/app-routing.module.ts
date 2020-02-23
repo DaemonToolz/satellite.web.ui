@@ -9,6 +9,7 @@ import { ChatpageComponent } from './components/chat/chatpage/chatpage.component
 import { ContactpageComponent } from './components/chat/contactpage/contactpage.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { CalendarComponent } from './components/calendar/calendar.component'; 
+import { NotificationsComponent } from './shared/notifications/notifications.component';
 
 const routes: Routes = [
   {path:'myspace', component:MySpaceComponent, canActivate: [AuthGuardService] },
@@ -18,6 +19,8 @@ const routes: Routes = [
   {path:'mycalendar', component:CalendarComponent},
 
   {path:'account', component:AccountComponent, canActivate: [AuthGuardService] },
+  {path:'notifications', component:NotificationsComponent, canActivate: [AuthGuardService] },
+
 
   {path:'chat/settings', component:ChatsettingsComponent, canActivate: [AuthGuardService] },
   {path:'chat/contacts', component:ContactpageComponent, canActivate: [AuthGuardService] },

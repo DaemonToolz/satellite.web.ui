@@ -37,6 +37,8 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatListModule } from '@angular/material/list'
+import { MatBadgeModule } from '@angular/material/badge'
+
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NotificationsComponent } from './shared/notifications/notifications.component'
 @NgModule({
@@ -55,10 +57,12 @@ import { NotificationsComponent } from './shared/notifications/notifications.com
     NotFoundComponent,
     CalendarComponent,
     NotificationsComponent,
+    
   ],
   imports: [
     FormsModule,
     MatTreeModule,
+    MatBadgeModule,
     NgxChartsModule,
     MatTabsModule,
     ReactiveFormsModule,
