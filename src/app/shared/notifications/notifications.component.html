@@ -6,13 +6,26 @@
 
     </mat-card-header>
     <mat-card-content>
+        <mat-toolbar>
+            <button class="centered"  mat-icon-button>
+                <mat-icon color="warn">clear_all</mat-icon>
+            </button >
+            <button class="centered" mat-icon-button>
+                <mat-icon  color="primary"> done_all</mat-icon>
+            </button>
+        </mat-toolbar>
+
         <mat-action-list role="list" >
-            <mat-list-item role="listitem" *ngFor="let data of notifications">
+            <mat-list-item role="listitem" *ngFor="let data of notifications; let i = index">
                 <h2  mat-line [innerHTML]="data.id"></h2>
                 <h2  mat-line [innerHTML]="data.to"></h2>
                 <h2 mat-line [innerHTML]="ProcessFunction[data.function]"> </h2>
                 <p mat-line  [innerHTML]="data.payload"></p>
                 <mat-icon [className]="InfoType[data.type]">{{InfoType[data.type]}}</mat-icon>
+
+                <button mat-icon-button class="delete-button" (click)="delete(i)">
+                    <mat-icon>delete_forever</mat-icon> 
+                </button>
             </mat-list-item>
         </mat-action-list>
     </mat-card-content>

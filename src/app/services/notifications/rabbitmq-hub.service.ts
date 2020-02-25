@@ -4,7 +4,6 @@ import { Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 
 import { RabbitMqMsg } from 'src/app/Models/process/RabbitMqMsg';
 import * as io from 'socket.io-client';
-import { EventEmitter } from 'protractor';
 
 
 @Injectable({
@@ -57,12 +56,22 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
               self.mySpaceUpdate.next(payload);
             })
 
+            this.socket.on('disconnect', (reason) => {
+              if (reason === 'io server disconnect') {
+                this.socket.connect();
+              }
+            });
+
+            this.socket.on('connect', () => {
+              this.socket.emit("identify", profile.name);
+            });
+
             this.socket.on("filewatch.system_updates", function (payload: RabbitMqMsg) {
               self.notifications.push(payload);
               self.myFilewatch.next(payload);
             })
 
-            this.socket.emit("identify", profile.name);
+           
           }
         })
       }

@@ -34,6 +34,10 @@ export class NotificationsComponent implements OnInit {
 
   }
 
+  public delete(index : number){
+    this.hub.notifications.splice(index,1);
+  } 
+
   public get notifications(): Array<RabbitMqMsg>{
     return this.hub.notifications;
   }
