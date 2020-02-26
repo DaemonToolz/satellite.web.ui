@@ -33,6 +33,9 @@ export class RabbitMqMsg {
 }
 
 export enum ProcessFunction {
+    Connect = "connect",
+    Disconnect = "disconnect",
+    Identify= "identify",
     MySpaceUpdate = "myspace.space_update",
     MySpaceValidate = "myspace.space_validation",
     FilewatchNotify = "filewatch.notify",

@@ -2,8 +2,9 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AuthservicesService } from '../authservices.service';
 import { Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 
-import { RabbitMqMsg } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, ProcessFunction } from 'src/app/Models/process/RabbitMqMsg';
 import * as io from 'socket.io-client';
+import { Channel } from 'src/app/Models/process/Channels';
 
 
 @Injectable({
@@ -17,6 +18,7 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
 
   public readonly mySpaceUpdate: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
   public readonly myFilewatch: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
+  public readonly generalUpdates: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
 
   public notifications: Array<RabbitMqMsg> = [];
 
@@ -43,18 +45,24 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
             }
 
             this.socket = io('ws://localhost:20000/', { transports: ['websocket'] });
-            this.socket.on("myspace.space_update", function (payload: RabbitMqMsg) {
+            this.socket.on(ProcessFunction.MySpaceUpdate, function (payload: RabbitMqMsg) {
               self.mySpaceUpdate.next(payload);
             })
 
-            this.socket.on("myspace.space_validation", function (payload: RabbitMqMsg) {
+            this.socket.on(ProcessFunction.MySpaceValidate, function (payload: RabbitMqMsg) {
               self.mySpaceUpdate.next(payload);
             })
 
-            this.socket.on("filewatch.notify", function (payload: RabbitMqMsg) {
-
+            this.socket.on(ProcessFunction.FilewatchNotify, function (payload: RabbitMqMsg) {
               self.mySpaceUpdate.next(payload);
             })
+
+            this.socket.on(Channel.Broadcast, function (payload: RabbitMqMsg) {
+              self.notifications.push(payload);
+              self.generalUpdates.next(payload);
+            })
+
+
 
             this.socket.on('disconnect', (reason) => {
               if (reason === 'io server disconnect') {
@@ -66,7 +74,12 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
               this.socket.emit("identify", profile.name);
             });
 
-            this.socket.on("filewatch.system_updates", function (payload: RabbitMqMsg) {
+            this.socket.on(ProcessFunction.FilewatchSysUpd, function (payload: RabbitMqMsg) {
+              self.notifications.push(payload);
+              self.myFilewatch.next(payload);
+            })
+
+            this.socket.on(Channel.MySpaceGeneral, function (payload: RabbitMqMsg) {
               self.notifications.push(payload);
               self.myFilewatch.next(payload);
             })

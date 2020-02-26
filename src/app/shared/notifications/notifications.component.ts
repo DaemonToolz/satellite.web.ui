@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
 import { Subscription } from 'rxjs';
 import { RabbitMqMsg, Status, Priority, InfoType, ProcessFunction } from 'src/app/Models/process/RabbitMqMsg';
@@ -8,10 +8,11 @@ import { RabbitMqMsg, Status, Priority, InfoType, ProcessFunction } from 'src/ap
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsComponent implements OnInit, OnDestroy {
+
 
   private myWatcher : Subscription;
-
+  private publicNotification : Subscription;
   public Status = Status;
   public Priority = Priority;
   public InfoType = InfoType;
@@ -24,14 +25,15 @@ export class NotificationsComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  
+  ngOnDestroy(): void {
+    this.myWatcher.unsubscribe()
+    this.publicNotification.unsubscribe();
+   }
   
   private initListener() {
-
-    this.myWatcher = this.hub.myFilewatch.subscribe(data => {
-
-    })
-
+    this.myWatcher = this.hub.myFilewatch.subscribe()
+    this.publicNotification = this.hub.generalUpdates.subscribe();
   }
 
   public delete(index : number){
