@@ -62,7 +62,10 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
               self.generalUpdates.next(payload);
             })
 
-
+            this.socket.on(ProcessFunction.NotifiationHubUpd, function (payload: RabbitMqMsg) {
+              self.notifications.push(new MsgWrapper(payload));
+              self.generalUpdates.next(payload);
+            })
 
             this.socket.on('disconnect', (reason) => {
               if (reason === 'io server disconnect') {
@@ -77,6 +80,12 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
             this.socket.on(ProcessFunction.FilewatchSysUpd, function (payload: RabbitMqMsg) {
               self.notifications.push(new MsgWrapper(payload));
               self.myFilewatch.next(payload);
+            })
+            
+            
+            this.socket.on(ProcessFunction.MySpaceNotify, function (payload: RabbitMqMsg) {
+              self.notifications.push(new MsgWrapper(payload));
+              self.generalUpdates.next(payload);
             })
 
             this.socket.on(Channel.MySpaceGeneral, function (payload: RabbitMqMsg) {

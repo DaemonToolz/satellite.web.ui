@@ -53,7 +53,9 @@ export enum ProcessFunction {
     Identify= "identify",
     MySpaceUpdate = "myspace.space_update",
     MySpaceValidate = "myspace.space_validation",
+    MySpaceNotify = "myspace.notify_all",
     FilewatchNotify = "filewatch.notify",
     FilewatchSysUpd = "filewatch.system_updates",
+    NotifiationHubUpd = "notification.system-update"
 }
 
