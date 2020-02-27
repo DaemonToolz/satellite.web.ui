@@ -1,3 +1,5 @@
+import { Time } from '@angular/common';
+
 export enum Status {
     error,
     new,
@@ -20,7 +22,19 @@ export enum InfoType {
     error
 }
 
-export class RabbitMqMsg {
+export class Notification{}
+
+export class MsgWrapper {
+    public constructor(_payload: Notification){
+        this.payload = _payload;
+        this.isSelected = false;
+    }
+
+    public isSelected : boolean;
+    public payload: Notification;
+}
+
+export class RabbitMqMsg extends Notification{
     public status: Status;
     public priority: Priority;
     public Type: InfoType;
@@ -29,6 +43,7 @@ export class RabbitMqMsg {
     public id: string;
     public function: string;
     public to: string;
+    public date: Time;
     public payload: string;
 }
 

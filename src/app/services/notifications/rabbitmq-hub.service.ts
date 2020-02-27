@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AuthservicesService } from '../authservices.service';
 import { Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 
-import { RabbitMqMsg, ProcessFunction } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, ProcessFunction, MsgWrapper } from 'src/app/Models/process/RabbitMqMsg';
 import * as io from 'socket.io-client';
 import { Channel } from 'src/app/Models/process/Channels';
 
@@ -20,7 +20,7 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
   public readonly myFilewatch: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
   public readonly generalUpdates: BehaviorSubject<RabbitMqMsg> = new BehaviorSubject(null);
 
-  public notifications: Array<RabbitMqMsg> = [];
+  public notifications: Array<MsgWrapper> = [];
 
   constructor(private auth: AuthservicesService) {
     const self = this;
@@ -58,7 +58,7 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
             })
 
             this.socket.on(Channel.Broadcast, function (payload: RabbitMqMsg) {
-              self.notifications.push(payload);
+              self.notifications.push(new MsgWrapper(payload));
               self.generalUpdates.next(payload);
             })
 
@@ -75,12 +75,12 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
             });
 
             this.socket.on(ProcessFunction.FilewatchSysUpd, function (payload: RabbitMqMsg) {
-              self.notifications.push(payload);
+              self.notifications.push(new MsgWrapper(payload));
               self.myFilewatch.next(payload);
             })
 
             this.socket.on(Channel.MySpaceGeneral, function (payload: RabbitMqMsg) {
-              self.notifications.push(payload);
+              self.notifications.push(new MsgWrapper(payload));
               self.myFilewatch.next(payload);
             })
 

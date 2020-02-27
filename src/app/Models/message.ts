@@ -6,3 +6,4 @@ export class Message {
     public recipients: Users[];
     public date: Date;
 }
+

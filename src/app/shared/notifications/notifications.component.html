@@ -7,25 +7,27 @@
     </mat-card-header>
     <mat-card-content>
         <mat-toolbar>
-            <button class="centered"  mat-icon-button>
+            <button class="centered" *ngIf="anySelected" (click)="clearSelected()" mat-icon-button>
                 <mat-icon color="warn">clear_all</mat-icon>
             </button >
-            <button class="centered" mat-icon-button>
+            <button class="centered" (click)="clearAll()" mat-icon-button>
                 <mat-icon  color="primary"> done_all</mat-icon>
             </button>
         </mat-toolbar>
 
         <mat-action-list role="list" >
-            <mat-list-item role="listitem" *ngFor="let data of notifications; let i = index">
-                <h2  mat-line [innerHTML]="data.id"></h2>
-                <h2  mat-line [innerHTML]="data.to"></h2>
-                <h2 mat-line [innerHTML]="ProcessFunction[data.function]"> </h2>
-                <p mat-line  [innerHTML]="data.payload"></p>
-                <mat-icon [className]="InfoType[data.type]">{{InfoType[data.type]}}</mat-icon>
+            <mat-list-item role="listitem" *ngFor="let data of notifications; let i = index" [class.selected]="data.isSelected" (click)="select(i);$event.stopPropagation()">
 
-                <button mat-icon-button class="delete-button" (click)="delete(i)">
+                <button mat-icon-button class="delete-button" (click)="delete(i); $event.stopPropagation()">
                     <mat-icon>delete_forever</mat-icon> 
                 </button>
+                <h2  mat-line [innerHTML]="'Ticket number : ' + data.payload.id + ' @ ' + data.payload.date"></h2>
+                <h2  mat-line [innerHTML]="'To : ' +  data.payload.to"></h2>
+                <h2 mat-line [innerHTML]="'Feature : ' + ProcessFunction[data.payload.function]"> </h2>
+                <p mat-line  [innerHTML]="data.payload.payload"></p>
+                <mat-icon matListIcon [className]="InfoType[data.payload.type]">{{InfoType[data.payload.type]}}</mat-icon>
+
+            
             </mat-list-item>
         </mat-action-list>
     </mat-card-content>

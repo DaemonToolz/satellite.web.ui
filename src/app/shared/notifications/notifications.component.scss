@@ -19,3 +19,15 @@ mat-toolbar{
   .info {
     color: darkblue;
   }
+
+  .selected{
+    background: rgba(150,150,150,0.50);
+  }
+  .selected:hover{
+    background: rgba(75,75,75,0.50);
+
+  }
+/*
+  ::ng-deep .mat-list-item-content{
+    flex-direction: row-reverse !important;
+  }*/
