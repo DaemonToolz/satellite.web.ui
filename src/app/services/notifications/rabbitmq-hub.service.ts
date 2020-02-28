@@ -4,7 +4,7 @@ import { Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 
 import { RabbitMqMsg, ProcessFunction, MsgWrapper } from 'src/app/Models/process/RabbitMqMsg';
 import * as io from 'socket.io-client';
-import { Channel } from 'src/app/Models/process/Channels';
+import { Channel, SocketFunction } from 'src/app/Models/process/Channels';
 
 
 @Injectable({
@@ -57,25 +57,26 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
               self.mySpaceUpdate.next(payload);
             })
 
-            this.socket.on(Channel.Broadcast, function (payload: RabbitMqMsg) {
-              self.notifications.push(new MsgWrapper(payload));
-              self.generalUpdates.next(payload);
-            })
-
-            this.socket.on(ProcessFunction.NotifiationHubUpd, function (payload: RabbitMqMsg) {
-              self.notifications.push(new MsgWrapper(payload));
-              self.generalUpdates.next(payload);
-            })
-
-            this.socket.on('disconnect', (reason) => {
+            this.socket.on(SocketFunction.Disconnect, (reason) => {
               if (reason === 'io server disconnect') {
                 this.socket.connect();
               }
             });
 
-            this.socket.on('connect', () => {
-              this.socket.emit("identify", profile.name);
+            this.socket.on(SocketFunction.Connect, () => {
+              this.socket.emit(SocketFunction.Identify, profile.name);
             });
+
+            /*
+            export enum Channel {
+              MySpaceGeneral = "myspace-notification",
+              Broadcast      = "general-notification"
+              */
+            this.socket.on(ProcessFunction.NotifiationHubUpd, function (payload: RabbitMqMsg) {
+              self.notifications.push(new MsgWrapper(payload));
+              self.generalUpdates.next(payload);
+            })
+
 
             this.socket.on(ProcessFunction.FilewatchSysUpd, function (payload: RabbitMqMsg) {
               self.notifications.push(new MsgWrapper(payload));
@@ -88,12 +89,20 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
               self.generalUpdates.next(payload);
             })
 
-            this.socket.on(Channel.MySpaceGeneral, function (payload: RabbitMqMsg) {
-              self.notifications.push(new MsgWrapper(payload));
-              self.myFilewatch.next(payload);
+            Object.entries(Channel).forEach(channel => {
+              this.socket.on(channel[0], function (payload: RabbitMqMsg) {
+                self.notifications.push(new MsgWrapper(payload));
+                self.generalUpdates.next(payload);
+              })
+            })
+           
+            Object.entries(ProcessFunction).forEach(channel => {
+              this.socket.on(channel[0], function (payload: RabbitMqMsg) {
+                self.notifications.push(new MsgWrapper(payload));
+                self.generalUpdates.next(payload);
+              })
             })
 
-           
           }
         })
       }

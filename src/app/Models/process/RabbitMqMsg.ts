@@ -48,9 +48,7 @@ export class RabbitMqMsg extends Notification{
 }
 
 export enum ProcessFunction {
-    Connect = "connect",
-    Disconnect = "disconnect",
-    Identify= "identify",
+
     MySpaceUpdate = "myspace.space_update",
     MySpaceValidate = "myspace.space_validation",
     MySpaceNotify = "myspace.notify_all",
