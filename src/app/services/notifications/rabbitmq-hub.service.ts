@@ -64,7 +64,6 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
               })
             })
            
-
             Object.entries(MySpaceEvents).forEach(event => {
               this.socket.on(event[1], function (payload: RabbitMqMsg) {
                 self.mySpaceUpdate.next(payload);

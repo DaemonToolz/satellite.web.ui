@@ -1,4 +1,19 @@
-<mat-card>
+<mat-card *ngIf="isOnError">
+    <mat-card-header>
+        <mat-card-title>
+            <h1><strong>Oh oh, it appears you have some troubles with MySpace!</strong></h1>
+            <h2><strong [innerHTML]="lastError?.name"></strong></h2>
+        </mat-card-title>
+     </mat-card-header>
+        <mat-card-content>
+
+            <p [innerHTML]="lastError?.message"></p>
+            <p [innerHTML]="lastError?.stack"></p>
+            
+        </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="!isOnError">
     <mat-card-header>
         <mat-card-title>
             <h1><strong>Welcome to My Space</strong></h1>

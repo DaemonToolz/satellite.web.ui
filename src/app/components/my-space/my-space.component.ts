@@ -47,6 +47,11 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public loading: boolean = false;
 
   private onFolderChanged$: Subscription;
+  
+  public isOnError : boolean = false;
+  public lastError : Error;
+  private onErrorSub : Subscription;
+
 
   ngOnInit() {
   }
@@ -77,6 +82,12 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   }
 
   constructor(private auth: AuthservicesService, public spaceServices: MyspaceService, private updaters: RabbitmqHubService) {
+
+    this.onErrorSub = this.spaceServices.onError.subscribe(error => {
+      this.isOnError = (error != null);
+      this.lastError = error; 
+    
+    })
 
     this.onFolderChanged$ = this.spaceServices.folderChanged.subscribe(data => {
       this.refreshFiles();
