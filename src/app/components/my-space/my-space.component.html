@@ -54,8 +54,6 @@
 
         <mat-action-list role="list" *ngIf="!spaceServices.isSpaceValid">
             <mat-list-item role="listitem" *ngFor="let data of statuses | keyvalue">
-
-                <h2 mat-line [innerHTML]="ProcessFunction[data.value.function]"> </h2>
                 <p mat-line  [innerHTML]="data.value.payload"></p>
                 <mat-progress-spinner *ngIf="isOngoing(data.value)" diameter="32" strokeWidth="5" mode="indeterminate"></mat-progress-spinner>
                 <mat-icon *ngIf="!isOngoing(data.value)" [className]="InfoType[data.value.type]">{{InfoType[data.value.type]}}</mat-icon>

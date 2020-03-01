@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
 import { Subscription } from 'rxjs';
-import { RabbitMqMsg, Status, Priority, InfoType, ProcessFunction, MsgWrapper } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, Status, Priority, InfoType, MsgWrapper } from 'src/app/Models/process/RabbitMqMsg';
 
 @Component({
   selector: 'app-notifications',
@@ -10,14 +10,10 @@ import { RabbitMqMsg, Status, Priority, InfoType, ProcessFunction, MsgWrapper } 
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
 
-
-  private myWatcher : Subscription;
   private publicNotification : Subscription;
   public Status = Status;
   public Priority = Priority;
   public InfoType = InfoType;
-  public ProcessFunction = ProcessFunction;
-
   
   constructor(private hub : RabbitmqHubService) {
     this.initListener();  
@@ -27,12 +23,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    this.myWatcher.unsubscribe()
     this.publicNotification.unsubscribe();
    }
   
   private initListener() {
-    this.myWatcher = this.hub.myFilewatch.subscribe()
     this.publicNotification = this.hub.generalUpdates.subscribe();
   }
 

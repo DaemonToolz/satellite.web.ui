@@ -23,7 +23,6 @@
                 </button>
                 <h2  mat-line [innerHTML]="'Ticket number : ' + data.payload.id + ' @ ' + data.payload.date"></h2>
                 <h2  mat-line [innerHTML]="'To : ' +  data.payload.to"></h2>
-                <h2 mat-line [innerHTML]="'Feature : ' + ProcessFunction[data.payload.function]"> </h2>
                 <p mat-line  [innerHTML]="data.payload.payload"></p>
                 <mat-icon matListIcon [className]="InfoType[data.payload.type]">{{InfoType[data.payload.type]}}</mat-icon>
 

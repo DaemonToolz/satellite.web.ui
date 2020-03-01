@@ -6,7 +6,7 @@ import { MyspaceService } from 'src/app/services/spaces/myspace.service';
 import { AuthservicesService } from 'src/app/services/authservices.service';
 import { Observable, Subscription } from 'rxjs';
 import { RabbitmqHubService } from 'src/app/services/notifications/rabbitmq-hub.service';
-import { RabbitMqMsg, Status, Priority, InfoType, ProcessFunction } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, Status, Priority, InfoType, MySpaceEvents, FilewatchEvents } from 'src/app/Models/process/RabbitMqMsg';
 import { SelectMultipleControlValueAccessor } from '@angular/forms';
 import { ThrowStmt } from '@angular/compiler';
 import { SpaceValidation } from 'src/app/Models/space';
@@ -33,7 +33,6 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public Status = Status;
   public Priority = Priority;
   public InfoType = InfoType;
-  public ProcessFunction = ProcessFunction;
 
   private myFiles: VirtualFile[] = [];
 
@@ -98,16 +97,16 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   private notify(data: RabbitMqMsg){
     switch(data.function){
-      case ProcessFunction.MySpaceValidate:
+      case MySpaceEvents.MySpaceValidate:
         this.statuses.clear();
         this.refreshFiles()
         this.loading = false;
         break;
-      case ProcessFunction.MySpaceUpdate:
+      case MySpaceEvents.MySpaceUpdate:
         this.currentStatus = data;
         this.statuses.set(data.id, data);
         break;
-      case ProcessFunction.FilewatchNotify:
+      case FilewatchEvents.FilewatchNotify:
         this.refreshFiles()
         break;
     }
