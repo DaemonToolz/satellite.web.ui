@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AuthservicesService } from '../authservices.service';
 import { Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 
-import { RabbitMqMsg, MsgWrapper, MySpaceEvents, NotificationEvents } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, MsgWrapper, MySpaceEvents, NotificationEvents, FilewatchEvents } from 'src/app/Models/process/RabbitMqMsg';
 import * as io from 'socket.io-client';
 import { Channel, SocketFunction } from 'src/app/Models/process/Channels';
 
@@ -58,7 +58,7 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
 
 
             Object.entries(Channel).forEach(channel => {
-              this.socket.on(channel[0], function (payload: RabbitMqMsg) {
+              this.socket.on(channel[1], function (payload: RabbitMqMsg) {
                 self.notifications.push(new MsgWrapper(payload));
                 self.generalUpdates.next(payload);
               })
@@ -66,14 +66,20 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
            
 
             Object.entries(MySpaceEvents).forEach(event => {
-              this.socket.on(event[0], function (payload: RabbitMqMsg) {
+              this.socket.on(event[1], function (payload: RabbitMqMsg) {
+                self.mySpaceUpdate.next(payload);
+              })
+            })
+           
+            Object.entries(FilewatchEvents).forEach(event => {
+              this.socket.on(event[1], function (payload: RabbitMqMsg) {
                 self.mySpaceUpdate.next(payload);
               })
             })
            
 
             Object.entries(NotificationEvents).forEach(func => {
-              this.socket.on(func[0], function (payload: RabbitMqMsg) {
+              this.socket.on(func[1], function (payload: RabbitMqMsg) {
                 self.notifications.push(new MsgWrapper(payload));
                 self.generalUpdates.next(payload);
               })
