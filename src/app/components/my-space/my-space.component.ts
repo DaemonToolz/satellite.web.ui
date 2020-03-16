@@ -39,12 +39,10 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public FileType = FileType;
   public selectedFolder: Files;
   public files$: Observable<Files[]>;
-  private profile$: Subscription;
-  private spaceUpdates$: Subscription;
 
-  public currentStatus: RabbitMqMsg;
-  public statuses: Map<string, RabbitMqMsg> = new Map();
-  public loading: boolean = false;
+
+  private profile$: Subscription;
+  private update$: Subscription;
 
   private onFolderChanged$: Subscription;
   
@@ -58,10 +56,8 @@ export class MySpaceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.clearSub();
-    if(this.spaceUpdates$){
-      this.spaceUpdates$.unsubscribe();
-    }
     this.onFolderChanged$.unsubscribe();
+    this.onErrorSub.unsubscribe();
   }
 
   private clearSub() {
@@ -81,7 +77,15 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor(private auth: AuthservicesService, public spaceServices: MyspaceService, private updaters: RabbitmqHubService) {
+  public get statuses(){
+    return this.spaceServices.statuses;
+  }
+
+  public get loading(){
+    return this.spaceServices.loading;
+  }
+
+  constructor(private auth: AuthservicesService, public spaceServices: MyspaceService) {
 
     this.onErrorSub = this.spaceServices.onError.subscribe(error => {
       this.isOnError = (error != null);
@@ -92,42 +96,12 @@ export class MySpaceComponent implements OnInit, OnDestroy {
     this.onFolderChanged$ = this.spaceServices.folderChanged.subscribe(data => {
       this.refreshFiles();
     });
-    this.initListener();
-
+ 
   }
 
-  private initListener() {
-
-    this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
-      if (data != null) {
-        this.notify(data)
-      }
-    })
-
-  }
-
-  private notify(data: RabbitMqMsg){
-    switch(data.function){
-      case MySpaceEvents.MySpaceValidate:
-        this.statuses.clear();
-        this.refreshFiles()
-        this.loading = false;
-        break;
-      case MySpaceEvents.MySpaceUpdate:
-        this.currentStatus = data;
-        this.statuses.set(data.id, data);
-        break;
-      case FilewatchEvents.FilewatchNotify:
-        this.refreshFiles()
-        break;
-    }
-    
-    
-  }
 
   public initializeMySpace() {
     this.spaceServices.initSpace();
-    this.loading = true;
   }
 
 

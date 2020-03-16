@@ -5,7 +5,9 @@
     </a>
 
     <a *ngIf="(isAuthenticated)"  mat-button routerLink="/myspace" >
-        <mat-icon svgIcon="my_space"> </mat-icon>
+        <mat-icon *ngIf="!isMySpaceBusy" svgIcon="my_space"> </mat-icon>
+        <mat-icon *ngIf="isMySpaceBusy" > sync </mat-icon>
+        
         <span> My Space</span>
     </a>
 

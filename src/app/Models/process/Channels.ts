@@ -7,5 +7,7 @@ export enum Channel {
 export enum SocketFunction{
     Connect = "connect",
     Disconnect = "disconnect",
-    Identify= "identify"
+    Identify= "identify",
+    OnError = "error",
+    OnReconnectError = "reconnect_error"
 }

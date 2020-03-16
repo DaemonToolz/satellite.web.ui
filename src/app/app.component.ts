@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthservicesService } from './services/authservices.service';
 import { Subscription } from 'rxjs';
 import { RabbitmqHubService } from './services/notifications/rabbitmq-hub.service';
+import { MyspaceService } from './services/spaces/myspace.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ export class AppComponent {
 
   public  isAuthenticated: boolean;
   public  myProfile: any;
-  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, public auth : AuthservicesService, public hub: RabbitmqHubService){
+  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, public auth : AuthservicesService, public hub: RabbitmqHubService, private mySpaceService: MyspaceService){
     this.matIconRegistry.addSvgIcon(`web_manager`,this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/images/web-manager.svg`));
     this.matIconRegistry.addSvgIcon(`my_space`,this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/images/my-space.svg`));
     this.matIconRegistry.addSvgIcon(`choices`,this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/images/choices.svg`));
@@ -45,6 +46,10 @@ export class AppComponent {
         this.myProfile = result
     });
     
+  }
+
+  public get isMySpaceBusy(){
+    return this.mySpaceService.loading;
   }
 
   public login(){

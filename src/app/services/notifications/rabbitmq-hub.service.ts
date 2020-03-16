@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AuthservicesService } from '../authservices.service';
 import { Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 
-import { RabbitMqMsg, MsgWrapper, MySpaceEvents, NotificationEvents, FilewatchEvents } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitMqMsg, MsgWrapper, MySpaceEvents, NotificationEvents, FilewatchEvents, Priority, Status, InfoType } from 'src/app/Models/process/RabbitMqMsg';
 import * as io from 'socket.io-client';
 import { Channel, SocketFunction } from 'src/app/Models/process/Channels';
 
@@ -56,6 +56,14 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
               this.socket.emit(SocketFunction.Identify, profile.name);
             });
 
+            this.socket.on(SocketFunction.OnError, () => {
+              this.notify("-1", "Unable to connect to the notification hub, retrying.... If the problem persist, contact the website administrator", Channel.Broadcast, "", Priority.critical, Status.new, InfoType.error )
+            })
+
+            this.socket.on(SocketFunction.OnReconnectError, () => {
+              this.notify("-2", "Unable to reconnect to the notification hub. If the problem persist, contact the website administrator", Channel.Broadcast, "", Priority.critical, Status.new, InfoType.error )
+            })
+    
 
             Object.entries(Channel).forEach(channel => {
               this.socket.on(channel[1], function (payload: RabbitMqMsg) {
@@ -107,5 +115,26 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
 
   }
 
+
+  public notify(id : string, payload: string, to : string, func : string, priority : Priority, status: Status, type: InfoType ){
+    let message = this.constructClientSideNotification(id, payload, to, func, priority, status, type)
+    this.notifications.push(new MsgWrapper(message));
+    this.generalUpdates.next(message);
+  }
+
+  private constructClientSideNotification(id : string, payload: string, to : string, func : string, priority : Priority, status: Status, type: InfoType ): RabbitMqMsg{
+    let message: RabbitMqMsg = new RabbitMqMsg();
+
+    message.id = id;
+    message.date = new Date(Date.now());
+    message.function = func;
+    message.payload = payload;
+    message.priority = priority;
+    message.status = status;
+    message.to = to; 
+    message.Type = type; 
+  
+    return message;
+  }
 
 }

@@ -7,7 +7,8 @@ import { environment } from 'src/environments/environment';
 import { AuthservicesService } from '../authservices.service';
 import { SpaceValidation } from 'src/app/Models/space';
 import { take } from 'rxjs/operators';
-import { Status } from 'src/app/Models/process/RabbitMqMsg';
+import { Status, RabbitMqMsg, MySpaceEvents, FilewatchEvents } from 'src/app/Models/process/RabbitMqMsg';
+import { RabbitmqHubService } from '../notifications/rabbitmq-hub.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,8 @@ export class MyspaceService extends GenericHttpService<Files> {
   public folders : string[] = ["/myspace"];
 
   public folderChanged: BehaviorSubject<boolean> = new BehaviorSubject(null);;
-
-  constructor(_http: HttpClient, private _auth : AuthservicesService) { 
+  public triggeredUpdate : BehaviorSubject<boolean> = new BehaviorSubject(null);;
+  constructor(_http: HttpClient, private _auth : AuthservicesService,  private updaters: RabbitmqHubService) { 
     super(_http)
     this.init(environment.services.myspace);
 
@@ -30,6 +31,7 @@ export class MyspaceService extends GenericHttpService<Files> {
       if(result != null)
         this.myUsername = result.name
     });
+    this.initListener();
     
   }
 
@@ -79,4 +81,40 @@ export class MyspaceService extends GenericHttpService<Files> {
   public get myConfig(): SpaceValidation{
     return this.mySpaceConfig;
   }
+
+  //#region Notification
+  private spaceUpdates$: Subscription;
+
+  public currentStatus: RabbitMqMsg;
+  public statuses: Map<string, RabbitMqMsg> = new Map();
+  public loading: boolean = false;
+
+  private notify(data: RabbitMqMsg){
+    switch(data.function){
+      case MySpaceEvents.MySpaceValidate:
+        this.statuses.clear();
+        this.folderChanged.next(true)
+        this.loading = false;
+        break;
+      case MySpaceEvents.MySpaceUpdate:
+        this.currentStatus = data;
+        this.loading = true;
+        this.statuses.set(data.id, data);
+        break;
+      case FilewatchEvents.FilewatchNotify:
+        this.loading = false;
+        this.folderChanged.next(true)
+        break;
+    }
+  }
+  
+  private initListener() {
+    this.spaceUpdates$ = this.updaters.mySpaceUpdate.subscribe(data => {
+      if (data != null) {
+        this.notify(data);
+      }
+    })
+
+  }
+  //#endregion Notification
 }

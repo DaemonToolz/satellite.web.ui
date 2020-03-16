@@ -43,7 +43,7 @@ export class RabbitMqMsg extends Notification{
     public id: string;
     public function: string;
     public to: string;
-    public date: Time;
+    public date: Date;
     public payload: string;
 }
 
