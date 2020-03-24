@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Users } from 'src/app/Models/users';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Users, UserInfo } from 'src/app/Models/users';
+import { GenericHttpService } from '../shared/generic-http-client';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class UsersService  {
 
   public users : Users[] = [];
 
@@ -23,5 +24,9 @@ export class UsersService {
       this.users.push(u);
     }
   }
+
+
+
+
 
 }

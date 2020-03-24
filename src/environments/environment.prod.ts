@@ -9,6 +9,7 @@ export const environment = {
   },
 
   services: {
-    myspace : 'http://localhost:10850'
+    myspace : 'http://localhost:10850',
+    users : 'http://localhost:14000'
   }
 };

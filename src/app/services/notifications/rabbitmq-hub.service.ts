@@ -57,11 +57,11 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
             });
 
             this.socket.on(SocketFunction.OnError, () => {
-              this.notify("-1", "Unable to connect to the notification hub, retrying.... If the problem persist, contact the website administrator", Channel.Broadcast, "", Priority.critical, Status.new, InfoType.error )
+              this.notify({ id: "-1", payload: "Unable to connect to the notification hub, retrying.... If the problem persist, contact the website administrator", to: Channel.Broadcast, func: "", priority: Priority.critical, status: Status.new, type: InfoType.error })
             })
 
             this.socket.on(SocketFunction.OnReconnectError, () => {
-              this.notify("-2", "Unable to reconnect to the notification hub. If the problem persist, contact the website administrator", Channel.Broadcast, "", Priority.critical, Status.new, InfoType.error )
+              this.notify({ id: "-2", payload: "Unable to reconnect to the notification hub. If the problem persist, contact the website administrator", to: Channel.Broadcast, func: "", priority: Priority.critical, status: Status.new, type: InfoType.error })
             })
     
 
@@ -116,13 +116,13 @@ export class RabbitmqHubService implements OnInit, OnDestroy {
   }
 
 
-  public notify(id : string, payload: string, to : string, func : string, priority : Priority, status: Status, type: InfoType ){
-    let message = this.constructClientSideNotification(id, payload, to, func, priority, status, type)
+  public notify({ id, payload, to, func, priority, status, type }: { id: string; payload: string; to: string; func: string; priority: Priority; status: Status; type: InfoType; }){
+    let message = this.constructClientSideNotification({ id, payload, to, func, priority, status, type })
     this.notifications.push(new MsgWrapper(message));
     this.generalUpdates.next(message);
   }
 
-  private constructClientSideNotification(id : string, payload: string, to : string, func : string, priority : Priority, status: Status, type: InfoType ): RabbitMqMsg{
+  private constructClientSideNotification({ id, payload, to, func, priority, status, type }: { id: string; payload: string; to: string; func: string; priority: Priority; status: Status; type: InfoType; }): RabbitMqMsg{
     let message: RabbitMqMsg = new RabbitMqMsg();
 
     message.id = id;

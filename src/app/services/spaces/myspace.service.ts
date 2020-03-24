@@ -15,9 +15,11 @@ import { RabbitmqHubService } from '../notifications/rabbitmq-hub.service';
 })
 
 export class MyspaceService extends GenericHttpService<Files> {
-  private myUsername: string;
-  private authSubscription : Subscription;
+  private _myUsername: string;
+  private _authSubscription : Subscription;
+  private _profilePicture: any;
 
+  public coverPictureLoaded : boolean = false;
   public mySpaceConfig : SpaceValidation;
   public folders : string[] = ["/myspace"];
 
@@ -27,12 +29,36 @@ export class MyspaceService extends GenericHttpService<Files> {
     super(_http)
     this.init(environment.services.myspace);
 
-    this.authSubscription = this._auth.userProfile$.subscribe(result => {
+    this._authSubscription = this._auth.userProfile$.subscribe(result => {
       if(result != null)
-        this.myUsername = result.name
+        this._myUsername = result.name
     });
     this.initListener();
     
+  }
+
+  private getProfilePicture() {
+      this.getPicture(`spaces/cover/${this._myUsername}`).subscribe(data => {
+        this.createImageFromBlob(data);
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  private createImageFromBlob(image: Blob) {
+     let reader = new FileReader();
+     reader.addEventListener("load", () => {
+        this._profilePicture = reader.result;
+        this.coverPictureLoaded = true;
+     }, false);
+  
+     if (image) {
+        reader.readAsDataURL(image);
+     }
+  }
+
+  public get ProfilePicture(){
+    return this._profilePicture
   }
 
   public set CurrentFolder(newValue: string){
@@ -54,7 +80,9 @@ export class MyspaceService extends GenericHttpService<Files> {
   }
 
   public getCurrentFolder(){
-    return this.postArray(`files/${this.myUsername}`, JSON.stringify({path:this.absolutePath})).pipe(take(1));
+    this.getProfilePicture();
+  
+    return this.postArray(`files/${this._myUsername}`, JSON.stringify({path:this.absolutePath})).pipe(take(1));
   }
 
   public getFiles(name: string){
@@ -63,11 +91,11 @@ export class MyspaceService extends GenericHttpService<Files> {
   
   
   public initSpace(){
-    this.postAny("spaces/init", JSON.stringify({id: this.myUsername})).pipe(take(1)).subscribe()
+    this.postAny("spaces/init", JSON.stringify({id: this._myUsername})).pipe(take(1)).subscribe()
   }
 
   public updateExists(){
-    this.getAny<SpaceValidation>(`spaces/${this.myUsername}/exists`).pipe(take(1)).subscribe(data => this.mySpaceConfig = data )
+    this.getAny<SpaceValidation>(`spaces/${this._myUsername}/exists`).pipe(take(1)).subscribe(data => this.mySpaceConfig = data )
   }
 
   public get lastFolder(): string{
@@ -116,5 +144,7 @@ export class MyspaceService extends GenericHttpService<Files> {
     })
 
   }
+
+  
   //#endregion Notification
 }

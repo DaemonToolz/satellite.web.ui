@@ -59,6 +59,15 @@ export class GenericHttpService<T> {
     })
   }
   
+  protected getPicture(ressource: string): Observable<any>{
+    // Ajouter authorizationheader
+    return this._http.get(`${this._endpoint}/${ressource}`,  { responseType: 'blob' }).catch((err : Error) => {
+      this.onError.next(err);
+      return new Observable()
+    })
+  }
+
+  
   protected getAny<A>(ressource: string): Observable<A>{
     // Ajouter authorizationheader
     return this._http.get<A>(`${this._endpoint}/${ressource}`).catch((err : Error) => {
@@ -68,6 +77,7 @@ export class GenericHttpService<T> {
   }
 
   
+
   protected postAny<A>(ressource:string, body: any): Observable<A>{
     // Ajouter authorizationheader
     return this._http.post<A>(`${this._endpoint}/${ressource}`, body).catch((err : Error) => {

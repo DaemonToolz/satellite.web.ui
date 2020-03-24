@@ -11,9 +11,10 @@ export const environment = {
     callbackURL: 'http://localhost:4200/',
     audience: 'https://dtoolz.eu.auth0.com' //'api.web-mananger.auth.dev'
   },
-
+// Prévoir un service de sicovery
   services: {
-    myspace : 'http://localhost:10850'
+    myspace : 'http://localhost:10850',
+    users : 'http://localhost:14000'
   }
 };
 

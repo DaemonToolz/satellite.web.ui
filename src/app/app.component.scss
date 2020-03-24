@@ -1,9 +1,11 @@
 .main-container {
-    height: 95vh;
+    height: calc(100vh - 65px);
     width: 100vw;
 
   }
-  
+  mat-drawer { display: flex; }
+  mat-drawer-container { flex: 1 1 auto; }
+
   mat-toolbar{
     width: 100vw; 
     display:flex;

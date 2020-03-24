@@ -14,7 +14,7 @@ export class AccountComponent implements OnInit {
   public myData;
 
   constructor(private dataService: AccountDataService, private auth : AuthservicesService, private router : Router) { 
-    this.myData = this.dataService.MyActivity;
+    this.myData = [];
   }
 
   public get myProfile(){

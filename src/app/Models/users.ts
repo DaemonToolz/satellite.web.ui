@@ -14,3 +14,9 @@ export class OAuthUser{
     public updated_at: Date;
     public created_at : Date;
 }
+
+export class UserInfo {
+    public  _key : string ;
+	public  real_name  : string;
+	public  email    : string;
+}

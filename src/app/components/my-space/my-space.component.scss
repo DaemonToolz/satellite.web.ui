@@ -22,11 +22,11 @@ mat-card-actions{
 }
 
  mat-card-content{
-    height:80vh;
+    //height:80vh;
 }
 mat-card{
-    height:90vh;
-    overflow: hidden;
+    //height:90vh;
+    //overflow: hidden;
 }
 cdk-virtual-scroll-viewport{
     width: 100%;
@@ -35,7 +35,7 @@ cdk-virtual-scroll-viewport{
 
   mat-action-list{
     width: 100%;
-    height: 70%;
+    height: 100vh;
   }
 
   mat-checkbox{
@@ -65,4 +65,9 @@ cdk-virtual-scroll-viewport{
 
   mat-progress-spinner{
     float : left;
+  }
+
+  .cover {
+    max-width:40% !important;
+    align-self: center;
   }

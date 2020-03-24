@@ -4,13 +4,13 @@
             <h1><strong>Oh oh, it appears you have some troubles with MySpace!</strong></h1>
             <h2><strong [innerHTML]="lastError?.name"></strong></h2>
         </mat-card-title>
-     </mat-card-header>
-        <mat-card-content>
+    </mat-card-header>
+    <mat-card-content>
 
-            <p [innerHTML]="lastError?.message"></p>
-            <p [innerHTML]="lastError?.stack"></p>
-            
-        </mat-card-content>
+        <p [innerHTML]="lastError?.message"></p>
+        <p [innerHTML]="lastError?.stack"></p>
+
+    </mat-card-content>
 </mat-card>
 
 <mat-card *ngIf="!isOnError">
@@ -18,17 +18,33 @@
         <mat-card-title>
             <h1><strong>Welcome to My Space</strong></h1>
         </mat-card-title>
+
         <mat-card-subtitle *ngIf="spaceServices.isSpaceValid">
-            <h2> Here you can store everything you want</h2>
-            <button mat-raised-button>
-                Share a bit of your space !
-            </button>
-            
-            <button mat-raised-button>
-                Invite a friend !
-            </button>
-    
-            <h3>Created on <strong [innerHTML]="(myConfig?.created_at | date: 'dd-MM-yyyy')"></strong></h3>
+
+            <div fxLayout="row" fxLayoutAlign="space-between">
+                <div fxLayout="row" fxFlex.gt-lg="50%" fxFlex.gt-md="50%" fxFlex.gt-sm="99%" fxFlex.gt-xs="99%">
+                    <div>
+                        <h2> Here you can store everything you want</h2>
+                        <button mat-raised-button>
+                            Share a bit of your space !
+                        </button>
+
+                        <button mat-raised-button>
+                            Invite a friend !
+                        </button>
+
+                        <h3>Created on <strong [innerHTML]="(myConfig?.created_at | date: 'dd-MM-yyyy')"></strong></h3>
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlex.gt-lg="50%" fxFlex.gt-md="50%" fxFlex.gt-sm="99%" fxFlex.gt-xs="99%">
+                    <img mat-card-image [src]="coverPicture" class="cover" alt="My cover picture"
+                        *ngIf="hasCoverPicture; else noImageFound">
+                    <ng-template #noImageFound>
+                        <img mat-card-image src="assets/images/myspace.png" class="cover" alt="Default image">
+                    </ng-template>
+                </div>
+
+            </div>
         </mat-card-subtitle>
         <mat-card-subtitle *ngIf="!spaceServices.isSpaceValid">
             <h2> It appears your space has not been created yet </h2>
@@ -37,47 +53,53 @@
             </button>
         </mat-card-subtitle>
     </mat-card-header>
+    <!--    Trouver une section pour l'image de couverture
 
+-->
     <mat-card-content>
-     
+
         <div *ngIf="spaceServices.isSpaceValid">
             <h2><strong>Current folder : {{ spaceServices.absolutePath }}</strong></h2>
             <strong>Access folders</strong>
-            <button mat-raised-button *ngFor="let value of spaceServices.folders; let i = index;" (click)="travelTo(i)">{{value}}</button>
-  
+            <button mat-raised-button *ngFor="let value of spaceServices.folders; let i = index;"
+                (click)="travelTo(i)">{{value}}</button>
+
         </div>
         <mat-toolbar *ngIf="spaceServices.isSpaceValid">
-            <button class="centered"  mat-icon-button>
+            <button class="centered" mat-icon-button>
                 <mat-icon>note_add</mat-icon>
-            </button >
-            <button class="centered"  mat-icon-button>
+            </button>
+            <button class="centered" mat-icon-button>
                 <mat-icon>reorder</mat-icon>
-            </button >
-            <button class="centered"  mat-icon-button (click)="refreshFiles()">
+            </button>
+            <button class="centered" mat-icon-button (click)="refreshFiles()">
                 <mat-icon>refresh</mat-icon>
-            </button >
-              
-            <button class="centered"  mat-icon-button>
+            </button>
+
+            <button class="centered" mat-icon-button>
                 <mat-icon>import_export</mat-icon>
-            </button >
-        
-            <button class="centered"  mat-icon-button>
-                <mat-icon color="warn" *ngIf="oneSelection" >clear</mat-icon>
-                <mat-icon  color="primary" *ngIf="!oneSelection" > done_all</mat-icon>
-            </button >
+            </button>
+
+            <button class="centered" mat-icon-button>
+                <mat-icon color="warn" *ngIf="oneSelection">clear</mat-icon>
+                <mat-icon color="primary" *ngIf="!oneSelection"> done_all</mat-icon>
+            </button>
         </mat-toolbar>
 
         <mat-action-list role="list" *ngIf="!spaceServices.isSpaceValid">
             <mat-list-item role="listitem" *ngFor="let data of statuses | keyvalue">
-                <p mat-line  [innerHTML]="data.value.payload"></p>
-                <mat-progress-spinner *ngIf="isOngoing(data.value)" diameter="32" strokeWidth="5" mode="indeterminate"></mat-progress-spinner>
-                <mat-icon *ngIf="!isOngoing(data.value)" [className]="InfoType[data.value.type]">{{InfoType[data.value.type]}}</mat-icon>
+                <p mat-line [innerHTML]="data.value.payload"></p>
+                <mat-progress-spinner *ngIf="isOngoing(data.value)" diameter="32" strokeWidth="5" mode="indeterminate">
+                </mat-progress-spinner>
+                <mat-icon *ngIf="!isOngoing(data.value)" [className]="InfoType[data.value.type]">
+                    {{InfoType[data.value.type]}}</mat-icon>
             </mat-list-item>
         </mat-action-list>
 
-        <mat-action-list role="list" *ngIf="spaceServices.isSpaceValid">
-            <cdk-virtual-scroll-viewport [itemSize]="30">
-                <mat-list-item role="listitem" *cdkVirtualFor="let node of files$ | async" (click)="setCurrentFolder(node); $event.stopPropagation()">
+        <mat-action-list role="list" class="list" *ngIf="spaceServices.isSpaceValid">
+            <cdk-virtual-scroll-viewport  [itemSize]="30">
+                <mat-list-item role="listitem" *cdkVirtualFor="let node of files$ | async"
+                    (click)="setCurrentFolder(node); $event.stopPropagation()">
                     <!--<mat-checkbox [(ngModel)]="fileDetails(node.name).selected"></mat-checkbox>-->
 
                     <button mat-icon-button class="mat-24 centered file-type">

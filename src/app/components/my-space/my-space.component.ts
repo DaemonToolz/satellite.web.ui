@@ -50,6 +50,13 @@ export class MySpaceComponent implements OnInit, OnDestroy {
   public lastError : Error;
   private onErrorSub : Subscription;
 
+  public get coverPicture(){
+    return this.spaceServices.ProfilePicture
+  }
+
+  public get hasCoverPicture(){
+    return this.spaceServices.coverPictureLoaded
+  }
 
   ngOnInit() {
   }
