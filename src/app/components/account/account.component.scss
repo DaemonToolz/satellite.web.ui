@@ -23,8 +23,8 @@ mat-grid-item{
 }
 
 .mat-card-avatar{
-    width: calc(5vw + 5vh);
-    height:calc(5vw + 5vh);
+    width: calc(10vw + 5vh) !important;
+    height:calc(10vw + 5vh) !important;
 }
 
 .pre-header{
@@ -35,5 +35,21 @@ mat-grid-item{
 
 img:hover{
     cursor: pointer;
-    background-color: rgba(black, 0.5);
+ 
 }
+
+.active-picture:hover{
+    border: solid 5px black;
+}
+
+a.container {
+    display: inline-flex;
+    padding: 0;
+    background-color: black;
+}
+
+a.container:hover img {
+    opacity: 0.4;
+
+}
+

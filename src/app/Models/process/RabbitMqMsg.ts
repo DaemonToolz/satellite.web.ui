@@ -50,15 +50,20 @@ export class RabbitMqMsg extends Notification{
 export enum MySpaceEvents {
     MySpaceUpdate = "myspace.space_update",
     MySpaceValidate = "myspace.space_validation",
-   
+    MySpaceCoverUpdate = "myspace.cover.update"
 }
 
 export enum FilewatchEvents {
     FilewatchNotify = "filewatch.notify"
 }
 
+export enum AccountEvents {
+	UsersValidate    = "system.users.validated"
+}
+
 export enum NotificationEvents {
     FilewatchSysUpd = "filewatch.system_updates",
     MySpaceNotify = "myspace.notify_all",
+    UsersRegistered  = "system.users.registered",
     NotifiationHubUpd = "notification.system-update"
 }

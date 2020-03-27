@@ -38,9 +38,14 @@ import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatListModule } from '@angular/material/list'
 import { MatBadgeModule } from '@angular/material/badge'
+import { MatSnackBarModule } from '@angular/material/snack-bar'
+import { MatTooltipModule } from '@angular/material/tooltip'
+import { MatDialogModule } from '@angular/material/dialog'
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NotificationsComponent } from './shared/notifications/notifications.component'
+import { NotificationsComponent } from './shared/notifications/notifications.component';
+import { ImageUploaderComponent } from './shared/image-manager/image-uploader/image-uploader.component';
+import { UpdaterDialogComponent } from './components/account/image/updater-dialog/updater-dialog.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,6 +62,9 @@ import { NotificationsComponent } from './shared/notifications/notifications.com
     NotFoundComponent,
     CalendarComponent,
     NotificationsComponent,
+    ImageUploaderComponent,
+    UpdaterDialogComponent,
+    
     
   ],
   imports: [
@@ -79,9 +87,12 @@ import { NotificationsComponent } from './shared/notifications/notifications.com
     MatFormFieldModule,
     MatSidenavModule,
     MatListModule,
+    MatTooltipModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     FlexLayoutModule,
+    MatSnackBarModule,
+    MatDialogModule,
     AppRoutingModule
   ],
   providers: [ AccountDataService, DeactivateGuardService, AuthGuardService, UsersService, DatePipe, HttpInterceptorService],

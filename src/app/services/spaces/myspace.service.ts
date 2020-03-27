@@ -36,7 +36,7 @@ export class MyspaceService extends GenericHttpService<Files> {
     this.initListener();
     
   }
-
+// Duplicate 
   private getProfilePicture() {
       this.getPicture(`spaces/cover/${this._myUsername}`).subscribe(data => {
         this.createImageFromBlob(data);
@@ -44,7 +44,7 @@ export class MyspaceService extends GenericHttpService<Files> {
         console.log(error);
       });
   }
-
+// Duplicate 
   private createImageFromBlob(image: Blob) {
      let reader = new FileReader();
      reader.addEventListener("load", () => {

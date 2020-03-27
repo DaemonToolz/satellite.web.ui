@@ -1,6 +1,14 @@
 <mat-card>
     <div class="pre-header">
-        <img mat-card-avatar [src]="(myProfile | async).picture">
+        <a  mat-card-avatar class="container" matTooltip="Edit the profile picture" (click)="openDialog()" matTooltipPosition="below" >
+            <img  mat-card-avatar [src]="profilePicture"  
+            alt="My profile picture" *ngIf="hasProfilePicture; else noImageFound">
+        
+        </a>
+        <ng-template #noImageFound>
+            
+            <img mat-card-avatar [src]="(myProfile | async).picture" alt="Default profile picture">
+        </ng-template>
     </div>
     <mat-card-header>
      
